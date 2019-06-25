@@ -1,0 +1,8 @@
+<table class="table table-hover">
+  <tr *ngFor="let rec of service.list">
+    <td (click)="populateForm(rec)">[{{rec.Band}}]-{{rec.Album}}</td>
+    <td (click)="populateForm(rec)">{{rec.Year}}</td>
+    <td (click)="populateForm(rec)">{{rec.Genre}}</td>
+    <td><button (click)="onDelete(rec.RecordID)" class="btn-sm btn-outline-danger">X</button></td>
+  </tr>
+</table>
