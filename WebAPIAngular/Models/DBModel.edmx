@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="RecordsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="RecordsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Record">
           <Key>
             <PropertyRef Name="RecordID" />
@@ -14,12 +14,12 @@
           <Property Name="Album" Type="varchar" MaxLength="50" />
           <Property Name="Year" Type="int" />
           <Property Name="Genre" Type="varchar" MaxLength="50" />
+          <Property Name="Image" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityContainer Name="RecordsModelStoreContainer">
           <EntitySet Name="Record" EntityType="Self.Record" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RecordsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -32,6 +32,7 @@
           <Property Name="Album" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Year" Type="Int32" />
           <Property Name="Genre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="RecordsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Records" EntityType="Self.Record" />
@@ -45,6 +46,7 @@
           <EntitySetMapping Name="Records">
             <EntityTypeMapping TypeName="RecordsModel.Record">
               <MappingFragment StoreEntitySet="Record">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="RecordID" ColumnName="RecordID" />
                 <ScalarProperty Name="Band" ColumnName="Band" />
                 <ScalarProperty Name="Album" ColumnName="Album" />

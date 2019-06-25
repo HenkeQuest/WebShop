@@ -19,5 +19,6 @@ namespace WebAPIAngular.Models
         public string Album { get; set; }
         public Nullable<int> Year { get; set; }
         public string Genre { get; set; }
+        public string Image { get; set; }
     }
 }
