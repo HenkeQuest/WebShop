@@ -10,6 +10,8 @@ import { RecordComponent } from './records/record/record.component';
 import { RecordListComponent } from './records/record-list/record-list.component';
 import { FormsModule }   from '@angular/forms';
 import { RecordService } from './shared/record.service';
+import { LoginComponent } from './user/login/login.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -17,14 +19,16 @@ import { RecordService } from './shared/record.service';
     AppComponent,
     RecordsComponent,
     RecordComponent,
-    RecordListComponent
+    RecordListComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    AppRoutingModule
   ],
   providers: [RecordService],
   bootstrap: [AppComponent]
