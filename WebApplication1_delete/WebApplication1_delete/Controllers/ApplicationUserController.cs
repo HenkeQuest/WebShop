@@ -28,6 +28,7 @@ namespace WebApplication1_delete.Controllers
             _signInManager = signInManager;
             _appSetting = appSettings.Value;
         }
+        //test coment
 
         [HttpPost]
         [Route("Register")]
