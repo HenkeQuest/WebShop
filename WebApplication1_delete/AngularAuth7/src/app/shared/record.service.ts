@@ -9,25 +9,26 @@ export class RecordService {
 
   formData : Record;
   list : Record[];
-  readonly rootURL = "http://localhost:49610/api"
+  readonly rootURL = "http://localhost:62921/api"
   constructor(private http : HttpClient) { }
 
   postRecord(formData : Record){
     console.log("formData: ", formData);
-    return this.http.post(this.rootURL+"/Records", formData)
+    return this.http.post(this.rootURL+"/Record", formData)
   }
 
   refreshList(){
-    this.http.get(this.rootURL+"/Records").toPromise().then(res => {
+    this.http.get(this.rootURL+"/Record").toPromise().then(res => {
+      console.log("Res: ", res);
       this.list = res as Record[];
     });
   }
 
   putRecord(formData : Record){
-    return this.http.put(this.rootURL+"/Records/"+formData.RecordID,formData);
+    return this.http.put(this.rootURL+"/Record/"+formData.RecordID,formData);
   }
 
   deleteRecord(id: number){
-    return this.http.delete(this.rootURL+"/Records/"+id);
+    return this.http.delete(this.rootURL+"/Record/"+id);
   }
 }
