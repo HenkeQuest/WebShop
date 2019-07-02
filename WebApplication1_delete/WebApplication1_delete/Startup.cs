@@ -38,6 +38,10 @@ namespace WebApplication1_delete
             services.AddDbContext<AuthenticationContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
+            services.AddDbContext<RecordContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+
+
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationContext>();
@@ -49,13 +53,11 @@ namespace WebApplication1_delete
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 4;
-            }
-            );
+            });
 
             services.AddCors();
 
             //Jwt Authentication
-
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
 
             services.AddAuthentication(x =>
@@ -103,6 +105,17 @@ namespace WebApplication1_delete
 
             app.UseAuthentication();
 
+            //to access wwwroot files
+            //app.UseStaticFiles();
+            //app.UseCookiePolicy();
+
+            //to access routes like: /home /record
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
             app.UseMvc();
         }
     }
