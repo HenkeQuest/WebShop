@@ -2,6 +2,7 @@ export class Record {
     RecordID :number;
     Band : string;
     Album : string;
-    Year : number;
+    Year : string;
     Genre : string;
+    Image : string;
 }

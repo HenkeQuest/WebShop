@@ -17,8 +17,10 @@ namespace WebApplication1_delete.Models
         [Column(TypeName = "nvarchar(100)")]
         public string Album { get; set; }
         [Column(TypeName = "nvarchar(100)")]
-        public int Year { get; set; }
+        public string Year { get; set; }
         [Column(TypeName = "nvarchar(250)")]
         public string Genre { get; set; }
+        [Column(TypeName = "varbinary(MAX)")]
+        public string Image { get; set; }
     }
 }

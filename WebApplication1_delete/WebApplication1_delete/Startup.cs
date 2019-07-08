@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApplication1_delete
 {
@@ -56,6 +57,12 @@ namespace WebApplication1_delete
             });
 
             services.AddCors();
+            services.AddMvc()
+            .AddJsonOptions(options => {
+                var resolver = options.SerializerSettings.ContractResolver;
+                if (resolver != null)
+                    (resolver as DefaultContractResolver).NamingStrategy = null;
+            });
 
             //Jwt Authentication
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());

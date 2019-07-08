@@ -38,8 +38,6 @@ namespace WebAPIAngular
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<AuthentificationContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")))
         }
 
 
