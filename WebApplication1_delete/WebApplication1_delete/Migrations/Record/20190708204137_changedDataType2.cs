@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1_delete.Migrations.Record
 {
-    public partial class InitialCreate : Migration
+    public partial class changedDataType2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,7 @@ namespace WebApplication1_delete.Migrations.Record
                     Album = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     Year = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     Genre = table.Column<string>(type: "nvarchar(250)", nullable: true),
-                    Image = table.Column<byte[]>(type: "varbinary(MAX)", nullable: true)
+                    Image = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {

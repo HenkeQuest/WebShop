@@ -10,8 +10,8 @@ using WebApplication1_delete.Models;
 namespace WebApplication1_delete.Migrations.Record
 {
     [DbContext(typeof(RecordContext))]
-    [Migration("20190706143434_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190708204137_changedDataType2")]
+    partial class changedDataType2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,8 +37,7 @@ namespace WebApplication1_delete.Migrations.Record
                     b.Property<string>("Genre")
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(MAX)");
+                    b.Property<byte[]>("Image");
 
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(100)");
