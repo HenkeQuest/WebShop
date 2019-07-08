@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RecordService } from 'src/app/shared/record.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Record } from 'src/app/shared/record.model';
 
 @Component({
   selector: 'app-record',
@@ -13,6 +14,8 @@ export class RecordComponent implements OnInit {
   imageFile: File = null;
   imageUrl : string = "/assets/img/default-image.png";
   fileToUpload : File = null;
+  imageByteArray : [];
+  record : Record;  
 
   constructor(private service : RecordService,
     private toastr : ToastrService) { }
@@ -56,21 +59,25 @@ export class RecordComponent implements OnInit {
     //Show image preview
     var reader = new FileReader();
     reader.onload = (event:any) => {
-      this.imageUrl = event.target.result;
+      //this.imageUrl = event.target.result;
+      //this.imageUrl = "dfgdgdfg";
+      var array = event.currentTarget.result;
+      this.imageByteArray = array;
+      console.log("readAsArrayBuffer: ", event);
+      console.log("reader: ", reader.result);
     }
 
-    reader.readAsDataURL(this.fileToUpload);
+    reader.readAsArrayBuffer(this.fileToUpload);
     console.log("event: ", this.imageUrl);
     //this.imageFile = <File>event.target.files[0];
   }
 
   insertRecord(form : NgForm){
     console.log("form.value: ", form.value.Image);
-    //form.value.Image = this.fileToUpload;
-
+    var imgUint8Array = new Uint8Array(this.imageByteArray);
     //form.value.Image = "sdsdcfsd";
     console.log("this.fileToUpload: ", form.value);
-    this.service.postRecord(form.value, this.fileToUpload).subscribe(res => {
+    this.service.postRecord(form.value, imgUint8Array).subscribe(res => {
       this.toastr.success("inserted successfully", 'EMP. Register');
       this.resetForm(form);
       this.service.refreshList();

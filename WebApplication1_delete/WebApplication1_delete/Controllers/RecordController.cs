@@ -112,19 +112,12 @@ namespace WebApplication1_delete.Controllers
             {
                 return BadRequest(ModelState);
             }
-            else
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    //await record.Image.CopyToAsync(memoryStream);
-                    //user.AvatarImage = memoryStream.ToArray();
-                }
-            }
 
-            _context.Records.Add(record);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRecord", null, null);
+            //_context.Records.Add(record);
+            //await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetRecord", new { id = record.RecordID }, record);
         }
 
         // DELETE: api/Record/5
