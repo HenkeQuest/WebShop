@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1_delete.Models;
 
+
 namespace WebApplication1_delete.Controllers
 {
     [Route("api/[controller]")]
@@ -86,25 +87,27 @@ namespace WebApplication1_delete.Controllers
 
         // POST: api/Record
         [HttpPost]
-        public async Task<IActionResult> PostRecord([FromBody] Record record)
+        public async Task<ActionResult<Record>> PostRecord()
         {
             string imageName = null;
-
-
-            //Upload Image
+            var httpRequest = HttpContext.Request;
+            Record record = new Record();
+            
+            //Upload Image  
             //Debugger.Break();
             Debug.WriteLine("Imageeeeeeeeeeeeeeeeeeeeeeeeeee: " );
-            Debug.Print("Image file: "+ record.Image + "\r\n");
+            
             Debug.Write("tjjaa" + "\r\n");
             Debug.WriteLine("Hallå du");
             //Create custom filename
             //imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
             //imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(postedFile.FileName);
-            //var filePath = HttpContext.Current.Server.MapPath("~/Image/" + imageName);
+            //var filePath = HttpContext.Server.MapPath("~/Image/" + imageName);
             //postedFile.SaveAs(filePath);
 
 
-
+            var postedFile = httpRequest;
+            Debug.Print("Image file: " + postedFile + "\r\n");
 
 
             Console.WriteLine("Record: "+ record);
@@ -114,8 +117,8 @@ namespace WebApplication1_delete.Controllers
             }
 
 
-            //_context.Records.Add(record);
-            //await _context.SaveChangesAsync();
+            _context.Records.Add(record);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRecord", new { id = record.RecordID }, record);
         }
