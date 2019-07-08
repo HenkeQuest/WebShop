@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1_delete.Models;
 
 namespace WebApplication1_delete.Migrations.Record
 {
     [DbContext(typeof(RecordContext))]
-    partial class RecordContextModelSnapshot : ModelSnapshot
+    [Migration("20190707123333_ChangedDataTypeForImage")]
+    partial class ChangedDataTypeForImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

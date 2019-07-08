@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1_delete.Models;
 
@@ -20,138 +22,131 @@ namespace WebApplication1_delete.Controllers
             _context = context;
         }
 
-        // GET: Record
+        // GET: api/Record
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Index()
+        public IEnumerable<Record> GetRecords()
         {
-            //return View(await _context.Records.ToListAsync());
-            return new string[] { "value2", "value2" };
+            Console.WriteLine("_context.Records: " + _context.Records);
+            return _context.Records;
         }
 
-        // GET: Record/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Record/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRecord([FromRoute] int id)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            var record = await _context.Records
-                .FirstOrDefaultAsync(m => m.RecordID == id);
-            if (record == null)
-            {
-                return NotFound();
-            }
-
-            //return View(record);
-            return null;
-        }
-
-        // GET: Record/Create
-        public IActionResult AddOrEdit()
-        {
-            //return View();
-            return null;
-        }
-
-        // POST: Record/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RecordID,Band,Album,Year,Genre")] Record record)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(record);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            //return View(record);
-            return null;
-        }
-
-        // GET: Record/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
             var record = await _context.Records.FindAsync(id);
+
             if (record == null)
             {
                 return NotFound();
             }
-            //return View(record);
-            return null;
+
+            return Ok(record);
         }
 
-        // POST: Record/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RecordID,Band,Album,Year,Genre")] Record record)
+        // PUT: api/Record/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRecord([FromRoute] int id, [FromBody] Record record)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != record.RecordID)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(record).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(record);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecordExists(record.RecordID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            //return View(record);
-            return null;
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RecordExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Record/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/Record
+        [HttpPost]
+        public async Task<IActionResult> PostRecord([FromBody] Record record)
         {
-            if (id == null)
+            string imageName = null;
+
+
+            //Upload Image
+            //Debugger.Break();
+            Debug.WriteLine("Imageeeeeeeeeeeeeeeeeeeeeeeeeee: " );
+            Debug.Print("Image file: "+ record.Image + "\r\n");
+            Debug.Write("tjjaa" + "\r\n");
+            Debug.WriteLine("Hallå du");
+            //Create custom filename
+            //imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+            //imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(postedFile.FileName);
+            //var filePath = HttpContext.Current.Server.MapPath("~/Image/" + imageName);
+            //postedFile.SaveAs(filePath);
+
+
+
+
+
+            Console.WriteLine("Record: "+ record);
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    //await record.Image.CopyToAsync(memoryStream);
+                    //user.AvatarImage = memoryStream.ToArray();
+                }
             }
 
-            var record = await _context.Records
-                .FirstOrDefaultAsync(m => m.RecordID == id);
+            _context.Records.Add(record);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetRecord", null, null);
+        }
+
+        // DELETE: api/Record/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRecord([FromRoute] int id)
+        {
+            Console.WriteLine("Delete record");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var record = await _context.Records.FindAsync(id);
             if (record == null)
             {
                 return NotFound();
             }
 
-            //return View(record);
-            return null;
-        }
-
-        // POST: Record/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var record = await _context.Records.FindAsync(id);
             _context.Records.Remove(record);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return Ok(record);
         }
 
         private bool RecordExists(int id)
