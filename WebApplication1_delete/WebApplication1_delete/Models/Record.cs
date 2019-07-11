@@ -20,7 +20,10 @@ namespace WebApplication1_delete.Models
         public string Year { get; set; }
         [Column(TypeName = "nvarchar(250)")]
         public string Genre { get; set; }
-        //[Column(TypeName = "varbinary(MAX)")]
+        [Column(TypeName = "varbinary(MAX)")]
         public byte[] Image { get; set; }
+        [Column(TypeName = "nvarchar(250)")]
+        public string ImagePath { get; set; }
+
     }
 }
