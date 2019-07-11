@@ -35,7 +35,11 @@ namespace WebApplication1_delete.Migrations.Record
                     b.Property<string>("Genre")
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<byte[]>("Image");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(MAX)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(100)");

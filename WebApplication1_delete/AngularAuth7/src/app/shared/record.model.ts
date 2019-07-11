@@ -4,5 +4,6 @@ export class Record {
     Album : string;
     Year : string;
     Genre : string;
-    Image :  Uint8Array;
+    Image :  File;
+    ImagePath : string;
 }

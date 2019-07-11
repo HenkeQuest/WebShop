@@ -33,7 +33,8 @@ export class RecordComponent implements OnInit {
       Album : "",
       Year : "",
       Genre : "",
-      Image : null
+      Image : null,
+      ImagePath : ""
     }
     this.imageUrl = "/assets/img/default-image.png";
   }
@@ -51,33 +52,19 @@ export class RecordComponent implements OnInit {
   }
 
   onFileSelected(file : FileList){
-    console.log("file: ", file);
-    console.log("file[0]: ", file[0]);
-    console.log("file.item(0): ", file.item(0));
-    this.fileToUpload = <File>file[0];
+    this.fileToUpload = file.item(0);
 
     //Show image preview
     var reader = new FileReader();
     reader.onload = (event:any) => {
-      //this.imageUrl = event.target.result;
-      //this.imageUrl = "dfgdgdfg";
-      var array = event.currentTarget.result;
-      this.imageByteArray = array;
-      console.log("readAsArrayBuffer: ", event);
-      console.log("reader: ", reader.result);
+      this.imageUrl = event.target.result;
     }
 
-    reader.readAsArrayBuffer(this.fileToUpload);
-    console.log("event: ", this.imageUrl);
-    //this.imageFile = <File>event.target.files[0];
+    reader.readAsDataURL(this.fileToUpload);
   }
 
   insertRecord(form : NgForm){
-    console.log("form.value: ", form.value.Image);
-    var imgUint8Array = new Uint8Array(this.imageByteArray);
-    //form.value.Image = "sdsdcfsd";
-    console.log("this.fileToUpload: ", form.value);
-    this.service.postRecord(form.value, imgUint8Array).subscribe(res => {
+    this.service.postRecord(form.value, this.fileToUpload).subscribe(res => {
       this.toastr.success("inserted successfully", 'EMP. Register');
       this.resetForm(form);
       this.service.refreshList();
