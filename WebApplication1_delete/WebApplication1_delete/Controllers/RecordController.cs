@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1_delete.Models;
 using System.Net.Http.Headers;
-using Simple.ImageResizer;
 using System.Net.Http;
-using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace WebApplication1_delete.Controllers
 {
@@ -26,7 +27,7 @@ namespace WebApplication1_delete.Controllers
         {
             _context = context;
         }
-
+   
         // GET: api/Record
         [HttpGet]
         public IEnumerable<Record> GetRecords()
@@ -111,9 +112,6 @@ namespace WebApplication1_delete.Controllers
             record.Year = Request.Form["Year"];
             record.Genre = Request.Form["Genre"];
 
-            
-
-
             Debug.WriteLine("Imageeeeeeeeeeeeeeeeeeeeeeeeeee: " );
             
             Debug.Write("tjjaa" + "\r\n");
@@ -161,12 +159,20 @@ namespace WebApplication1_delete.Controllers
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
-                        file.CopyTo(stream);
+                        await file.CopyToAsync(stream);
                     }
                     Debug.WriteLine("fullPath: " + fullPath);
                     Debug.WriteLine("pathToSave: " + pathToSave);
-                    ImageResizer resizer = new ImageResizer(@"C:\diagram.png");
-                    
+
+                    Image_resize(fullPath, pathToSave + "\\40\\" + fileName, 40);
+                    //Image_resize(fullPath, pathToSave + "\\80\\" + fileName, 80);
+                    //Image_resize(fullPath, pathToSave + "\\120\\" + fileName, 120);
+                    //Image_resize(fullPath, pathToSave + "\\240\\" + fileName, 240);
+                    //Image_resize(fullPath, pathToSave + "\\400\\" + fileName, 400);
+
+
+                    //Image<Rgba32> image;
+                    //var img = ImageCodecInfo.
                     //var byteArray1 = resizer.Resize(400, ImageEncoding.Png);
                     //resizer.SaveToFile(Path.Combine(pathToSave, file.FileName + "rezize"));
                 }
@@ -180,9 +186,9 @@ namespace WebApplication1_delete.Controllers
                 return StatusCode(500, "Internal server error");
             }
 
-            
-            
-            //var postedFile = httpRequest;
+
+
+
 
 
 
@@ -218,6 +224,91 @@ namespace WebApplication1_delete.Controllers
         private bool RecordExists(int id)
         {
             return _context.Records.Any(e => e.RecordID == id);
+        }
+
+        private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
+
+        {
+
+            //---------------< Image_resize() >---------------
+
+            //*Resizes an Image in Asp.Net MVC Core 2
+
+            //*Using Nuget CoreCompat.System.Drawing
+
+            //using System.IO
+            //using System.Drawing;             //CoreCompat
+            //using System.Drawing.Drawing2D;   //CoreCompat
+            //using System.Drawing.Imaging;     //CoreCompat
+
+            const long quality = 50L;
+            Bitmap source_Bitmap = new Bitmap(input_Image_Path);
+
+            double dblWidth_origial = source_Bitmap.Width;
+            double dblHeigth_origial = source_Bitmap.Height;
+            double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
+
+            int new_Height = (int)(new_Width * relation_heigth_width);
+
+
+            //< create Empty Drawarea >
+            var new_DrawArea = new Bitmap(new_Width, new_Height);
+
+            //</ create Empty Drawarea >
+            
+            using (var graphic_of_DrawArea = Graphics.FromImage(new_DrawArea))
+            {
+                //< setup >
+                graphic_of_DrawArea.CompositingQuality = CompositingQuality.HighSpeed;
+                graphic_of_DrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphic_of_DrawArea.CompositingMode = CompositingMode.SourceCopy;
+
+                //</ setup >
+                //< draw into placeholder >
+
+                //*imports the image into the drawarea
+                graphic_of_DrawArea.DrawImage(source_Bitmap, 0, 0, new_Width, new_Height);
+
+                //</ draw into placeholder >
+                //--< Output as .Jpg >--
+                Debug.WriteLine("output_Image_Path: " + output_Image_Path);
+
+                Debug.WriteLine("after catch: " + output_Image_Path);
+                //output_Image_Path = newpath;
+                try
+                {
+                    using (var output = System.IO.File.Open(output_Image_Path, FileMode.Create))
+                    {
+                        Debug.WriteLine("output: " + output);
+                        //< setup jpg >
+                        var qualityParamId = Encoder.Quality;
+                        var encoderParameters = new EncoderParameters(1);
+
+                        encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
+
+                        //</ setup jpg >
+                        //< save Bitmap as Jpg >
+                        var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
+
+
+                        new_DrawArea.Save(output, codec, encoderParameters);
+                        //resized_Bitmap.Dispose();
+
+                        output.Close();
+                        //</ save Bitmap as Jpg >
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine("ex: " + ex);
+                }
+
+                //--</ Output as .Jpg >--
+                graphic_of_DrawArea.Dispose();
+            }
+
+            source_Bitmap.Dispose();
+            //---------------</ Image_resize() >---------------
         }
     }
 }
