@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1_delete.Models;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Hosting;
 
 namespace WebApplication1_delete.Controllers
 {
@@ -22,12 +24,32 @@ namespace WebApplication1_delete.Controllers
     public class RecordController : ControllerBase
     {
         private readonly RecordContext _context;
+        private readonly IHostingEnvironment _hostEnvironment;
 
-        public RecordController(RecordContext context)
+        public RecordController(RecordContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostingEnvironment;
         }
-   
+
+
+        // GET: api/Record
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Records.ToListAsync());
+        //}
+
+        //// GET: Employee/Create
+        //[Route("api/[controller]/create")]
+        //public IActionResult AddOrEdit(int id = 0)
+        //{
+        //    if (id == 0)
+        //        return View(new Record());
+        //    else
+        //        return View(_context.Records.Find(id));
+        //}
+
+
         // GET: api/Record
         [HttpGet]
         public IEnumerable<Record> GetRecords()
@@ -119,43 +141,25 @@ namespace WebApplication1_delete.Controllers
             //Create custom filename
             IFormFile file = Request.Form.Files[0];
 
-            HttpResponseMessage d;
-
-
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                var fileBytes = ms.ToArray();
-                byte[] CoverImageBytes = null;
-                BinaryReader reader = new BinaryReader(file.OpenReadStream());
-                CoverImageBytes = reader.ReadBytes((int)file.Length);
-                
-                
-                string s = Convert.ToBase64String(fileBytes);
-                //ImageResizer resizer = new ImageResizer(s);
-                //var byteArray1 = resizer.Resize(400, ImageEncoding.Jpg90);
-
-                var folderName = "Images";
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                //resizer.SaveToFile(Path.Combine(pathToSave, file.FileName));
-
-                // act on the Base64 data
-            }
+            Debug.Write("Pass file" + file.FileName);
 
             try
             {
                 if (file.Length > 0)
                 {
+                    Debug.WriteLine("wwwroot: " + _hostEnvironment.WebRootPath);
                     var folderName = "Images";
-                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                    var postedFile = Request.ContentLength;
+                    var pathToSave = _hostEnvironment.WebRootPath + "\\Images\\40\\";
+
                     imageName = new String(Path.GetFileNameWithoutExtension(file.FileName).Take(10).ToArray()).Replace(" ", "-");
                     imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.FileName);
 
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName); //you can add this path to a list and then return all dbPaths to the client if require
-                    record.ImagePath = fullPath;
+
+                    
+                    var fullPath = Path.Combine(pathToSave , fileName);
+            
+                    record.ImagePath = fileName;
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {

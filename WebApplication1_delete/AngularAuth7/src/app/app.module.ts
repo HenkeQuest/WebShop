@@ -18,6 +18,8 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { RecordComponent } from './records/record/record.component';
 import { RecordListComponent } from './records/record-list/record-list.component';
 import { RecordsComponent } from './records/records.component';
+import { SafePipe } from './pipe/pipe.component';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { RecordsComponent } from './records/records.component';
     ForbiddenComponent,
     RecordComponent,
     RecordListComponent,
-    RecordsComponent
+    RecordsComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,

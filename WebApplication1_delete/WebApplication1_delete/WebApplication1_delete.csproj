@@ -7,7 +7,17 @@
   <ItemGroup>
     <Folder Include="Images\40\" />
     <Folder Include="Images\thumbnails\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Images\40\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\a1539570872_10.jpg" />
+    <None Include="wwwroot\Images\a2560572702_2.jpg" />
+    <None Include="wwwroot\Images\af.png" />
+    <None Include="wwwroot\Images\fb.png" />
+    <None Include="wwwroot\Images\hqdefault.jpg" />
+    <None Include="wwwroot\Images\Namnlös %28återställda%29.bmp" />
+    <None Include="wwwroot\Images\nordfront.png" />
   </ItemGroup>
 
   <ItemGroup>
