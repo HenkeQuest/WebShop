@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -69,6 +70,7 @@ namespace WebAPIAngular.Controllers
         [ResponseType(typeof(Record))]
         public IHttpActionResult PostRecord(Record record)
         {
+            Image img;
             db.Records.Add(record);
             db.SaveChanges();
             Console.WriteLine( "insert");
