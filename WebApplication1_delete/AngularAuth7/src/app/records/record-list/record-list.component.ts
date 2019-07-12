@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Record } from 'src/app/shared/record.model';
 import { ToastrService } from 'ngx-toastr';
 import { RecordService } from 'src/app/shared/record.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-record-list',
@@ -10,7 +11,7 @@ import { RecordService } from 'src/app/shared/record.service';
 })
 export class RecordListComponent implements OnInit {
 
-  constructor(private service : RecordService,
+  constructor(public sanitizer: DomSanitizer, private service : RecordService,
     private toastr : ToastrService) { }
 
   ngOnInit() {

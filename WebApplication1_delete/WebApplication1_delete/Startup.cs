@@ -113,7 +113,7 @@ namespace WebApplication1_delete
             app.UseAuthentication();
 
             //to access wwwroot files
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
             //app.UseCookiePolicy();
 
             //to access routes like: /home /record
@@ -122,6 +122,11 @@ namespace WebApplication1_delete
             //    routes.MapRoute(
             //        name: "default",
             //        template: "{controller=Home}/{action=Index}/{id?}");
+
+            //    routes.MapRoute(
+            //        name: "record",
+            //        template: "{controller=Record}/{action=Index}/{id?}");
+
             //});
             app.UseMvc();
         }
