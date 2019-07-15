@@ -1,6 +1,6 @@
 <table class="table table-hover">
   <tr *ngFor="let rec of service.list">
-    <td (click)="populateForm(rec)">{{rec.Band}}-{{rec.Album}}</td>
+    <td (click)="details(rec.RecordID)">{{rec.Band}}-{{rec.Album}}</td>
     <td (click)="populateForm(rec)">{{rec.Year}}</td>
     <td (click)="populateForm(rec)">
       <!-- <img [src]='rec.ImagePath | safe' height="40px" width="40px" alt='{{rec.ImagePath}}'> -->
