@@ -12,21 +12,33 @@ export class RecordService {
   readonly rootURL = "http://localhost:62921/api"
   constructor(private http : HttpClient) { }
 
-  postRecord(formData : Record,fileToUpload: File ){
-    const formData1: FormData = new FormData;
-    //formData.Image = fileToUpload;
-    formData1.append("Band", formData.Band);
-    formData1.append("Album", formData.Album);
-    formData1.append("Year", formData.Year);
-    formData1.append("Genre", formData.Genre);
-    formData1.append("Image", fileToUpload, fileToUpload.name);
-    formData1.append("ImagePath", formData.ImagePath);
+  postRecord(modelFormData : Record,fileToUpload: File ){
+    const formData: FormData = new FormData;
 
-    return this.http.post(this.rootURL+"/Record", formData1)
+    formData.append("Band", modelFormData.Band);
+    formData.append("Album", modelFormData.Album);
+    formData.append("Year", modelFormData.Year);
+    formData.append("Genre", modelFormData.Genre);
+    formData.append("Image", fileToUpload, fileToUpload.name);
+    formData.append("ImagePath", modelFormData.ImagePath);
+
+    return this.http.post(this.rootURL+"/Record", formData)
   }
 
-  putRecord(formData : Record){
-    return this.http.put(this.rootURL+"/Record/"+formData.RecordID,formData);
+  putRecord(modelFormData : Record,fileToUpload: File){
+    const formData: FormData = new FormData;
+
+    console.log("Puuuuuuuuuuuuuuuuut");
+    formData.append("Band", modelFormData.Band);
+    formData.append("RecordId", modelFormData.RecordID.toString());
+    formData.append("Album", modelFormData.Album);
+    formData.append("Year", modelFormData.Year);
+    formData.append("Genre", modelFormData.Genre);
+    if(fileToUpload != null){
+      formData.append("Image", fileToUpload, fileToUpload.name);
+    }
+    formData.append("ImagePath", modelFormData.ImagePath);
+    return this.http.put(this.rootURL+"/Record/"+modelFormData.RecordID,formData);
   }
 
   deleteRecord(id: number){
