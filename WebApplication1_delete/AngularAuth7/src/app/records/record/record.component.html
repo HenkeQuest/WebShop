@@ -1,6 +1,10 @@
 <form #form="ngForm" (submit)="onSubmit(form)" autocomplete="on">
   <input type="hidden" name="RecordID" [value]="service.formData.RecordID">
   <div class="form-group">
+    <label>RecordID</label>
+    <input  name="RecordID" #RecordID="ngModel" [(ngModel)]="service.formData.RecordID" class="form-control" required>
+  </div>
+  <div class="form-group">
     <label>Band</label>
     <input  name="Band" #Band="ngModel" [(ngModel)]="service.formData.Band" class="form-control" required>
     <div class="validation-error" *ngIf="Band.invalid && Band.touched">This field is required</div>
@@ -11,8 +15,8 @@
   </div>
   <div class="form-group">
     <label>Image</label>
-    <img [src]="imageUrl" style="width: 250px; height: 200px">
-    <input  type="file" #Image="ngModel" (change)="onFileSelected($event.target.files)" accept="image/*" name="Image"  [(ngModel)]="service.formData.Image" class="form-control" required>
+    <img src="{{service.formData.ImagePath}}" style="width: 250px; height: 200px">
+    <input  type="file" #Image="ngModel" (change)="onFileSelected($event.target.files)" accept="image/*" name="Image"  [(ngModel)]="service.formData.Image" class="form-control">
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">

@@ -19,6 +19,7 @@ import { RecordComponent } from './records/record/record.component';
 import { RecordListComponent } from './records/record-list/record-list.component';
 import { RecordsComponent } from './records/records.component';
 import { SafePipe } from './pipe/pipe.component';
+import { RecordDetailsComponent } from './records/record-details/record-details.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { SafePipe } from './pipe/pipe.component';
     RecordComponent,
     RecordListComponent,
     RecordsComponent,
-    SafePipe
+    SafePipe,
+    RecordDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,11 +48,13 @@ import { SafePipe } from './pipe/pipe.component';
     }),
     FormsModule
   ],
-  providers: [UserService, {
+  providers: [
+    UserService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
-    multi: true
-  }],
+    multi: true},
+    RecordComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

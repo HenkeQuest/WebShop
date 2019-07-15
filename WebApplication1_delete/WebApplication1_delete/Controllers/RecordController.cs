@@ -79,15 +79,66 @@ namespace WebApplication1_delete.Controllers
 
         // PUT: api/Record/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRecord([FromRoute] int id, [FromBody] Record record)
+        public async Task<IActionResult> PutRecord([FromRoute] int id )
         {
-            if (!ModelState.IsValid)
+            Debug.WriteLine("dfds: " + id);
+            Debug.WriteLine("Before file request");
+            //instead of passing "[FromBody] Record record" as an argument we create a new record because
+            //the view model and the database model does not match because of the file
+            Record record = new Record();
+            record.Band = Request.Form["Band"];
+            Debug.WriteLine("After form request");
+            record.Album = Request.Form["Album"];
+            record.Year = Request.Form["Year"];
+            record.Genre = Request.Form["Genre"];
+            record.ImagePath = Request.Form["ImagePath"];
+            record.RecordID = id;
+
+
+
+
+
+            Debug.WriteLine("Pass file request" );
+            try
             {
-                return BadRequest(ModelState);
+                IFormFile file = Request.Form.Files[0];
+                Debug.WriteLine("file: " + file.FileName);
+                if (file.Length > 0)
+                {
+                    Debug.WriteLine("file.Length: " + file.Length);
+                    var pathToSave = _hostEnvironment.WebRootPath + "\\Images\\40\\";
+
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    record.ImagePath = fileName;
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    //Image_resize(fullPath, pathToSave + "\\40\\" + fileName, 40);
+                }
+                else
+                {
+                    Console.WriteLine("No image selected");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("No image selected");
+                //return StatusCode(500, "Internal server error");
             }
 
-            if (id != record.RecordID)
+            if (!ModelState.IsValid)
             {
+                //return BadRequest(ModelState);
+            }
+
+            if (id.ToString() != Request.Form["RecordId"])
+            {
+                Debug.WriteLine("id match: " + id + " == " + Request.Form["RecordId"]);
                 return BadRequest();
             }
 
@@ -95,6 +146,7 @@ namespace WebApplication1_delete.Controllers
 
             try
             {
+                Console.WriteLine("save changes");
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -109,6 +161,7 @@ namespace WebApplication1_delete.Controllers
                 }
             }
 
+
             return NoContent();
         }
 
@@ -116,23 +169,13 @@ namespace WebApplication1_delete.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public async Task<IActionResult> PostRecord()
         {
-            if (Request.HasFormContentType && Request.Form != null && Request.Form.Count() > 0)
-            {
-                dynamic form = new { };
-                foreach (var f in Request.Form)
-                    Console.WriteLine("Form: ", f.Value);
-
-            }
-
-            string imageName = null;
-            var httpRequest = HttpContext.Items["Band"];
-            Debug.WriteLine("file: " + httpRequest);
 
             Record record = new Record();
             record.Band = Request.Form["Band"];
             record.Album = Request.Form["Album"];
             record.Year = Request.Form["Year"];
             record.Genre = Request.Form["Genre"];
+            record.ImagePath = Request.Form["ImagePath"]; ;
 
             Debug.WriteLine("Imageeeeeeeeeeeeeeeeeeeeeeeeeee: " );
             
@@ -147,16 +190,9 @@ namespace WebApplication1_delete.Controllers
             {
                 if (file.Length > 0)
                 {
-                    Debug.WriteLine("wwwroot: " + _hostEnvironment.WebRootPath);
-                    var folderName = "Images";
                     var pathToSave = _hostEnvironment.WebRootPath + "\\Images\\40\\";
 
-                    imageName = new String(Path.GetFileNameWithoutExtension(file.FileName).Take(10).ToArray()).Replace(" ", "-");
-                    imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.FileName);
-
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-
-                    
                     var fullPath = Path.Combine(pathToSave , fileName);
             
                     record.ImagePath = fileName;
@@ -165,20 +201,8 @@ namespace WebApplication1_delete.Controllers
                     {
                         await file.CopyToAsync(stream);
                     }
-                    Debug.WriteLine("fullPath: " + fullPath);
-                    Debug.WriteLine("pathToSave: " + pathToSave);
 
                     Image_resize(fullPath, pathToSave + "\\40\\" + fileName, 40);
-                    //Image_resize(fullPath, pathToSave + "\\80\\" + fileName, 80);
-                    //Image_resize(fullPath, pathToSave + "\\120\\" + fileName, 120);
-                    //Image_resize(fullPath, pathToSave + "\\240\\" + fileName, 240);
-                    //Image_resize(fullPath, pathToSave + "\\400\\" + fileName, 400);
-
-
-                    //Image<Rgba32> image;
-                    //var img = ImageCodecInfo.
-                    //var byteArray1 = resizer.Resize(400, ImageEncoding.Png);
-                    //resizer.SaveToFile(Path.Combine(pathToSave, file.FileName + "rezize"));
                 }
                 else
                 {
@@ -189,13 +213,6 @@ namespace WebApplication1_delete.Controllers
             {
                 return StatusCode(500, "Internal server error");
             }
-
-
-
-
-
-
-
 
             _context.Records.Add(record);
             await _context.SaveChangesAsync();
