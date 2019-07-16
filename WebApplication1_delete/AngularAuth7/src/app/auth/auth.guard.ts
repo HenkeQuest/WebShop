@@ -8,6 +8,8 @@ import { UserService } from '../shared/user.service';
 })
 export class AuthGuard implements CanActivate {
 
+  isAdmin : boolean = false;
+
   constructor(private router: Router, private service : UserService) {
 
   }
@@ -15,15 +17,26 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
+      
       if(localStorage.getItem('token')!=null){
         let roles = next.data['permittedRoles'] as Array<string>;
+        console.log("roles: "  , roles);
         if(roles){
-          if(this.service.roleMatch(roles)) return true;
+          if(this.service.roleMatch(roles)){
+            
+            this.isAdmin = true;
+            console.log("Hej this.isAdmin: ", this.isAdmin);
+            return true;
+          } 
           else{
             this.router.navigate(["/forbidden"]);
+            
+            this.isAdmin = false;
+            console.log("Hej this.isAdmin: ", this.isAdmin);
             return false;
           }
         }
+        console.log("canActivate");
         return true;
       }
       else{
