@@ -8,7 +8,7 @@ import { RecordComponent } from '../record/record.component';
 import { UserService } from 'src/app/shared/user.service';
 import { AuthGuard } from 'src/app/auth/auth.guard';
 import { HttpClient } from '@angular/common/http';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-record-list',
@@ -21,6 +21,8 @@ export class RecordListComponent implements OnInit {
   listData: MatTableDataSource<any>;
   searchResult;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  searchKey: string;
 
   constructor(public sanitizer: DomSanitizer, private router: Router, private service : RecordService,
     private toastr : ToastrService, private user : UserService) {
@@ -33,40 +35,23 @@ export class RecordListComponent implements OnInit {
       console.log("res: ", res);
       this.listData = new MatTableDataSource(this.service.list);
       this.listData.sort = this.sort;
-      // let array = list.map(item => {
-      //   let departmentName = "sdsd";
-      //   console.log("item: ", item);
-      //   return {
-      //     $key: item.RecordID,
-      //     departmentName,
-      //     item
-      //   };
-      // });
-      // let array = Object.keys(list).map(item => {
-      //   console.log("item: ", item);
-      //   return list[item];
-      // })
-      // this.searchResult = list;
-      // console.log("list: ", list);
-      // this.listData = [{RecordID: 13, Band: "Blink 182", Album: "fertret", Year: "frvrfgrfg", Genre: "efrefrefe", Image: null, ImagePath: "tammerfist.jpg"}];;
-      // this.listData = this.searchResult;
-      //this.listData = this.listData.filteredData;
-      //console.log("this.listData ", this.listData);
-
+      this.listData.paginator = this.paginator;
+      // this.listData.filterPredicate = (data, filter) => {
+      //   return this.displayedColumns.some(ele => {
+      //     return ele != 'actions' && data[ele].toLowerCase().indexOf(filter) != -1;
+      //   });
+      // };
     });
-    console.log("this.listData ", refresh);
-    //this.listData = this.service.list;
-    //this.service.list;
-
-    let list = [{RecordID: 13, Band: "Blink 182", Album: "fertret", Year: "frvrfgrfg", Genre: "efrefrefe", Image: null, ImagePath: "tammerfist.jpg"}];
-
-    //this.listData = new MatTableDataSource(this.service.list);
-    
       
   }
 
-  ngAfterContentInit(){
-    
+  onSearchClear(){
+    this.searchKey = "";
+    this.applyFilter();
+  }
+
+  applyFilter(){
+    this.listData.filter = this.searchKey.trim().toLowerCase();
   }
 
   isAdmin(){
