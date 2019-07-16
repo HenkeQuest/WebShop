@@ -7,9 +7,41 @@
       <img src="http://localhost:62921/Images/40/{{rec.ImagePath}}" height="40px" width="40px" alt='{{rec.ImagePath}}'>
     </td>
     <td (click)="populateForm(rec)">{{rec.Genre}}</td>
-    <td><button (click)="onDelete(rec.RecordID)" class="btn-sm btn-outline-danger">X</button></td>
+    <div *ngIf="isAdmin()">
+      <td>
+        <a class="btn btn-sm btn-info text-white" ><i class="fa fa-pencil"></i></a>
+        <a class="btn btn-sm btn-danger text-white ml-1" (click)="onDelete(rec.RecordID)"><i class="fa fa-trash"></i></a>
+      </td>
+    </div>
   </tr>
-
-  
 </table>
+
+<div class="mat-elevation-z8">
+  <mat-table [dataSource]="service.list">
+    <ng-container matColumnDef="Band">
+      <mat-header-cell *matHeaderCellDef>Band</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Band}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Album">
+      <mat-header-cell *matHeaderCellDef>Album</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Album}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Year">
+      <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Year}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Genre">
+      <mat-header-cell *matHeaderCellDef>Genre</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Genre}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="ImagePath">
+      <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <img src="http://localhost:62921/Images/40/{{element.ImagePath}}" height="40px" width="40px" alt='{{element.ImagePath}}'>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
 
