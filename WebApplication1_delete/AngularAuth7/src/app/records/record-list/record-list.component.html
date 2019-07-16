@@ -17,31 +17,50 @@
 </table>
 
 <div class="mat-elevation-z8">
-  <mat-table [dataSource]="service.list">
+  <mat-table [dataSource]="listData" matSort>
     <ng-container matColumnDef="Band">
-      <mat-header-cell *matHeaderCellDef>Band</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Band</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.Band}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="Album">
-      <mat-header-cell *matHeaderCellDef>Album</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Album</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.Album}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="Year">
-      <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Year</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.Year}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="Genre">
-      <mat-header-cell *matHeaderCellDef>Genre</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Genre</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.Genre}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="ImagePath">
-      <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Image</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <img src="http://localhost:62921/Images/40/{{element.ImagePath}}" height="40px" width="40px" alt='{{element.ImagePath}}'>
       </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef colspan="6">
+        Loading data...
+      </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="noData">
+        <mat-footer-cell *matFooterCellDef colspan="6">
+          No data.
+        </mat-footer-cell>
+      </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':service.list!=null}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(service.list!=null && service.list.length==0)}"></mat-footer-row>
   </mat-table>
 </div>
 

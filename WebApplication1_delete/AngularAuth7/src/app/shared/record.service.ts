@@ -28,7 +28,6 @@ export class RecordService {
   putRecord(modelFormData : Record,fileToUpload: File){
     const formData: FormData = new FormData;
 
-    console.log("Puuuuuuuuuuuuuuuuut");
     formData.append("Band", modelFormData.Band);
     formData.append("RecordId", modelFormData.RecordID.toString());
     formData.append("Album", modelFormData.Album);
@@ -45,9 +44,12 @@ export class RecordService {
     return this.http.delete(this.rootURL+"/Record/"+id);
   }
 
+  getRecords(){
+    return this.http.get(this.rootURL+"/Record").toPromise();
+  }
+
   refreshList(){
     this.http.get(this.rootURL+"/Record").toPromise().then(res => {
-      console.log("Res: ", res);
       this.list = res as Record[];
     });
   }
