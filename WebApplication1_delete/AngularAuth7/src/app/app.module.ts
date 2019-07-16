@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from "./material/material.module";
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,7 @@ import { SafePipe } from './pipe/pipe.component';
 import { RecordDetailsComponent } from './records/record-details/record-details.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +41,7 @@ import { RecordDetailsComponent } from './records/record-details/record-details.
   ],
   imports: [
     BrowserModule,
+    MaterialModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -47,6 +50,7 @@ import { RecordDetailsComponent } from './records/record-details/record-details.
       progressBar:true
     }),
     FormsModule
+    
   ],
   providers: [
     UserService, {

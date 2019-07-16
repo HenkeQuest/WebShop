@@ -3,8 +3,11 @@ import { Record } from 'src/app/shared/record.model';
 import { ToastrService } from 'ngx-toastr';
 import { RecordService } from 'src/app/shared/record.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { RecordComponent } from '../record/record.component';
+import { UserService } from 'src/app/shared/user.service';
+import { AuthGuard } from 'src/app/auth/auth.guard';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-record-list',
@@ -13,11 +16,18 @@ import { RecordComponent } from '../record/record.component';
 })
 export class RecordListComponent implements OnInit {
 
+  displayedColumns: string[] = ["Band","Album","Year","Genre","ImagePath"];
+
   constructor(public sanitizer: DomSanitizer, private router: Router, private service : RecordService,
-    private toastr : ToastrService, private Record : RecordComponent) { }
+    private toastr : ToastrService, private user : UserService) { }
 
   ngOnInit() {
     this.service.refreshList();
+  }
+
+  isAdmin(){
+    console.log("isAdmin: " , this.user.roleMatch(["Admin"]));
+    return this.user.roleMatch(["Admin"]);
   }
 
   populateForm(rec : Record){

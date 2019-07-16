@@ -14,7 +14,6 @@ export class RecordDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private service : RecordService) { }
 
   ngOnInit() {
-    console.log("list: " + this.service.list);
     this.route.params.subscribe(params => {
       this.service.list.forEach((rec: Record) => {
         console.log("rec: " + rec.RecordID);
