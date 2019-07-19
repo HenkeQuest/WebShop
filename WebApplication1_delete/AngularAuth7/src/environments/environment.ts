@@ -3,8 +3,19 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyARAUTc4pg2ECthLwXLu0yAGckoR8D9Jeg",
+    authDomain: "wpstore-34970.firebaseapp.com",
+    databaseURL: "https://wpstore-34970.firebaseio.com",
+    projectId: "wpstore-34970",
+    storageBucket: "gs://wpstore-34970.appspot.com",
+    messagingSenderId: "1037763398458",
+    appId: "1:1037763398458:web:e2a4ae17a8689ab6"
+  }
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file
