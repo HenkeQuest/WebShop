@@ -9,6 +9,7 @@ import { UserService } from 'src/app/shared/user.service';
 import { AuthGuard } from 'src/app/auth/auth.guard';
 import { HttpClient } from '@angular/common/http';
 import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-record-list',
@@ -19,6 +20,7 @@ export class RecordListComponent implements OnInit {
 
   displayedColumns: string[] = ["Band","Album","Year","Genre","ImagePath","actions"];
   listData: MatTableDataSource<any>;
+  recordsFB : Observable<Record[]>
   searchResult;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -31,6 +33,9 @@ export class RecordListComponent implements OnInit {
 
   ngOnInit() {
     var refresh = this.service.refreshList();
+
+    this.recordsFB = this.service.getRecordFromFB();
+    console.log("recordsFB: ", this.service);
     this.service.getRecords().then(res =>{
       console.log("res: ", res);
       this.listData = new MatTableDataSource(this.service.list);
