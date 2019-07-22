@@ -6,6 +6,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from "./material/material.module";
 import { ToastrModule } from 'ngx-toastr';
 
+
+import {AngularFireModule} from '@angular/fire'
+import {AngularFirestoreModule} from '@angular/fire/firestore'
+import {AngularFireStorageModule} from '@angular/fire/storage'
+import {AngularFireAuthModule} from '@angular/fire/auth'
+
+import {environment} from '../environments/environment'
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserComponent } from './user/user.component';
@@ -49,7 +57,11 @@ import { RecordDetailsComponent } from './records/record-details/record-details.
     ToastrModule.forRoot({
       progressBar:true
     }),
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireAuthModule,
     
   ],
   providers: [
