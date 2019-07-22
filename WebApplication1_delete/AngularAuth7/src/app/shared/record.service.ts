@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Record } from './record.model';
 import { HttpClient} from "@angular/common/http";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from '@angular/fire/firestore'
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +16,25 @@ export class RecordService {
   formData : Record;
   list : Record[];
   readonly rootURL = "http://localhost:62921/api"
-  constructor(private http : HttpClient) { }
+
+  recordsCollection: AngularFirestoreCollection<Record>;
+  constructor(private http : HttpClient, private afs: AngularFirestore) { 
+    this.recordsCollection = this.afs.collection('RecordDB', ref =>
+      ref.orderBy('Band','desc')
+    );
+  }
+
+  getRecordFromFB(){
+    return this.recordsCollection.snapshotChanges()
+    .pipe( map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as Record
+          const id = a.payload.doc.id
+          return {id, ...data}
+        })
+      })
+    )
+  }
 
   postRecord(modelFormData : Record,fileToUpload: File ){
     const formData: FormData = new FormData;
