@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Record } from 'src/app/shared/record.model';
 import { ToastrService } from 'ngx-toastr';
 import { RecordService } from 'src/app/shared/record.service';
@@ -8,8 +8,10 @@ import { RecordComponent } from '../record/record.component';
 import { UserService } from 'src/app/shared/user.service';
 import { AuthGuard } from 'src/app/auth/auth.guard';
 import { HttpClient } from '@angular/common/http';
-import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
-import { Observable } from 'rxjs';
+import { MatSort, MatTableDataSource, MatPaginator, MatDialog, MatDialogConfig } from '@angular/material';
+import { Observable, from, merge, of as observableOf } from 'rxjs';
+import { startWith, switchMap, map, catchError } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-record-list',
@@ -19,7 +21,7 @@ import { Observable } from 'rxjs';
 export class RecordListComponent implements OnInit {
 
   displayedColumns: string[] = ["Band","Album","Year","Genre","ImagePath","actions"];
-  listData: MatTableDataSource<any>;
+  listData = new MatTableDataSource<Record>();
   recordsFB : Observable<Record[]>
   searchResult;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -27,18 +29,22 @@ export class RecordListComponent implements OnInit {
   searchKey: string;
 
   constructor(public sanitizer: DomSanitizer, private router: Router, private service : RecordService,
-    private toastr : ToastrService, private user : UserService) {
+    private toastr : ToastrService, private user : UserService, private dialog : MatDialog, private cdr: ChangeDetectorRef) {
 
      }
 
   ngOnInit() {
-    var refresh = this.service.refreshList();
+    this.service.formData.ImagePath = "default-image.png";
+    this.service.getRecords().subscribe(res => {
+      console.log("subscribe after updateing");
+    })
+    this.refreshMatTable();
+  }
 
-    this.recordsFB = this.service.getRecordFromFB();
-    console.log("recordsFB: ", this.service);
-    this.service.getRecords().then(res =>{
-      console.log("res: ", res);
-      this.listData = new MatTableDataSource(this.service.list);
+  refreshMatTable(){
+    this.service.refreshList().subscribe(res =>{
+      console.log("record list updated: ", res);
+      this.listData.data = this.service.list;
       this.listData.sort = this.sort;
       this.listData.paginator = this.paginator;
       this.listData.filterPredicate = (data, filter) => {
@@ -47,7 +53,7 @@ export class RecordListComponent implements OnInit {
         });
       };
     });
-      
+
   }
 
   onSearchClear(){
@@ -60,15 +66,14 @@ export class RecordListComponent implements OnInit {
   }
 
   isAdmin(){
-    console.log("isAdmin: " , this.user.roleMatch(["Admin"]));
     return this.user.roleMatch(["Admin"]);
   }
 
   populateForm(rec : Record){
-    console.log("rec: ", rec);
+    console.log("rec.ImagePath: ", rec.ImagePath);
     this.service.formData = Object.assign({}, rec);
-    this.service.formData.ImagePath = "http://localhost:62921/Images/40/" + rec.ImagePath;
-    //this.service.formData.ImagePath = "new path";
+    //this.service.formData.ImagePath = rec.ImagePath;
+    
   }
 
   onDelete(id : number){
@@ -83,6 +88,27 @@ export class RecordListComponent implements OnInit {
   details(id: number){
     var myurl = `record/${id}`;
     this.router.navigateByUrl(myurl);
+  }
+
+  onCreate(){
+    this.service.formData.ImagePath = "default-image.png";
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    this.dialog.open(RecordComponent).afterClosed().subscribe(result =>{
+      this.refreshMatTable();
+    });
+  }
+
+  onEdit(row: Record){
+    console.log("row: ", row);
+    this.cdr.detectChanges();
+    this.populateForm(row);
+
+    this.dialog.open(RecordComponent).afterClosed().subscribe(result =>{
+      this.refreshMatTable();
+    });
   }
 
 }
