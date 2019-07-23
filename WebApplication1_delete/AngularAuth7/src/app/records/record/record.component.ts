@@ -3,6 +3,7 @@ import { RecordService } from 'src/app/shared/record.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Record } from 'src/app/shared/record.model';
+import { MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-record',
@@ -19,11 +20,12 @@ export class RecordComponent implements OnInit {
   record : Record;  
 
   constructor(private service : RecordService,
-    private toastr : ToastrService) { }
+    private toastr : ToastrService, public dialogRef: MatDialogRef<RecordComponent>) { }
 
   ngOnInit() {
-    this.resetForm();
-    this.service.formData.ImagePath = this.imageRootPath + "default-image.png";
+    console.log("ngOnInit");
+   // this.service.formData.ImagePath = "default-image.png";
+   // this.resetForm();
   }
 
   resetForm(form? : NgForm){
@@ -31,27 +33,22 @@ export class RecordComponent implements OnInit {
       form.resetForm();
     this.service.formData = {
       RecordID : 0,
-      Band : "",
+      Band : "tytyty",
       Album : "",
       Year : "",
       Genre : "",
       Image : null,
       ImagePath : ""
     }
-    this.service.formData.ImagePath =  this.imageRootPath + "default-image.png";
+    this.service.formData.ImagePath = "default-image.png";
     this.imageUrl = this.imageRootPath + "default-image.png";
   }
 
   onSubmit(form : NgForm){
-    console.log("form.value.RecordID: ", Image);
     if(form.value.RecordID == 0){
-      console.log("event: ", form.value);
-      
       this.insertRecord(form);
     }
     else{
-      console.log("form: " + form.value.Band);
-      console.log("event: ", this.service.formData.ImagePath);
       form.value.ImagePath = this.service.formData.ImagePath;
       this.updateRecord(form);
     }
@@ -64,7 +61,6 @@ export class RecordComponent implements OnInit {
     var reader = new FileReader();
     reader.onload = (event:any) => {
       this.imageUrl = event.target.result;
-      console.log("event.target.result: ", event.target.result);
       this.service.formData.ImagePath = event.target.result;
       this.imageUrl = event.target.result;
     }
@@ -77,6 +73,7 @@ export class RecordComponent implements OnInit {
       this.toastr.success("inserted successfully", 'EMP. Register');
       this.resetForm(form);
       this.service.refreshList();
+      this.dialogRef.close();
     },
     err =>{
       debugger;
@@ -85,13 +82,12 @@ export class RecordComponent implements OnInit {
   }
 
   updateRecord(form : NgForm){
+    console.log("form.value: ", form.value);
     this.service.putRecord(form.value, this.fileToUpload).subscribe(res =>{
-      console.log("form.Band: " + form.value.Band);
-      console.log("form.ImagePath: " + form.value.ImagePath);
-      console.log("form.Album: " + form.value.Album);
-      this.toastr.info("inserted successfully", 'EMP. Register');
+      this.toastr.info("updated successfully", 'EMP. Register');
       this.resetForm(form);
       this.service.refreshList();
+      this.dialogRef.close();
     });
   }
 

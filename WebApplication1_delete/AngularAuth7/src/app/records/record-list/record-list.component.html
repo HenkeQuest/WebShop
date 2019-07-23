@@ -17,7 +17,7 @@
 </table>
 
 <div class="search-div">
-  <button mat-raised-button>
+  <button mat-raised-button (click)="onCreate()">
     <mat-icon>add</mat-icon>Create
   </button>
   <mat-form-field class="search-form-field" floatLabel="never">
@@ -56,7 +56,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-icon-button><mat-icon>launch</mat-icon></button>
+        <button mat-icon-button (click)="onEdit(row)"><mat-icon>launch</mat-icon></button>
         <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
       </mat-cell>
     </ng-container>
