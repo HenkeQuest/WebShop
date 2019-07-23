@@ -7,6 +7,9 @@ import {
   AngularFirestoreDocument
 } from '@angular/fire/firestore'
 import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { MatTableDataSource } from '@angular/material';
+import { RecordListComponent } from '../records/record-list/record-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +21,21 @@ export class RecordService {
   readonly rootURL = "http://localhost:62921/api"
 
   recordsCollection: AngularFirestoreCollection<Record>;
+
   constructor(private http : HttpClient, private afs: AngularFirestore) { 
     this.recordsCollection = this.afs.collection('RecordDB', ref =>
       ref.orderBy('Band','desc')
     );
+
+    console.log("");
+    this.formData = new Record;
+    this.formData.Band = "";
+    this.formData.Album = "";
+    this.formData.Genre = "";
+    this.formData.Year = "";
+    this.formData.Image = null;
+    this.formData.ImagePath = "";
+    this.formData.RecordID = 0;
   }
 
   getRecordFromFB(){
@@ -61,6 +75,8 @@ export class RecordService {
       formData.append("Image", fileToUpload, fileToUpload.name);
     }
     formData.append("ImagePath", modelFormData.ImagePath);
+
+    this.getRecords();
     return this.http.put(this.rootURL+"/Record/"+modelFormData.RecordID,formData);
   }
 
@@ -68,13 +84,19 @@ export class RecordService {
     return this.http.delete(this.rootURL+"/Record/"+id);
   }
 
-  getRecords(){
-    return this.http.get(this.rootURL+"/Record").toPromise();
+  getRecords(): Observable<Record[]>{
+    return this.http.get<Record[]>(this.rootURL+"/Record");
   }
 
   refreshList(){
     this.http.get(this.rootURL+"/Record").toPromise().then(res => {
       this.list = res as Record[];
     });
+
+    return from(this.http.get(this.rootURL+"/Record").toPromise());
+  }
+
+  populateForm(record){
+    
   }
 }
