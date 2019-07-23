@@ -29,6 +29,8 @@ import { RecordListComponent } from './records/record-list/record-list.component
 import { RecordsComponent } from './records/records.component';
 import { SafePipe } from './pipe/pipe.component';
 import { RecordDetailsComponent } from './records/record-details/record-details.component';
+import { RecordService } from './shared/record.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 
 
@@ -69,8 +71,12 @@ import { RecordDetailsComponent } from './records/record-details/record-details.
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true},
-    RecordComponent
+    RecordComponent,
+    RecordService,
+    { provide: MatDialogRef, useValue: {} },
+	  { provide: MAT_DIALOG_DATA, useValue: [] },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [RecordComponent]
 })
 export class AppModule { }
