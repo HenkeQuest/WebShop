@@ -31,6 +31,9 @@ import { SafePipe } from './pipe/pipe.component';
 import { RecordDetailsComponent } from './records/record-details/record-details.component';
 import { RecordService } from './shared/record.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { CategoryService } from './shared/category.service';
+import { CategoryPanelComponent } from './records/category-panel/category-panel.component';
+import { ClothesComponent } from './records/clothes/clothes.component';
 
 
 
@@ -47,7 +50,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     RecordListComponent,
     RecordsComponent,
     SafePipe,
-    RecordDetailsComponent
+    RecordDetailsComponent,
+    CategoryPanelComponent,
+    ClothesComponent
   ],
   imports: [
     BrowserModule,
@@ -72,11 +77,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     useClass: AuthInterceptor,
     multi: true},
     RecordComponent,
+    CategoryPanelComponent,
     RecordService,
+    CategoryService,
     { provide: MatDialogRef, useValue: {} },
 	  { provide: MAT_DIALOG_DATA, useValue: [] },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [RecordComponent]
+  entryComponents: [RecordComponent, CategoryPanelComponent]
 })
 export class AppModule { }

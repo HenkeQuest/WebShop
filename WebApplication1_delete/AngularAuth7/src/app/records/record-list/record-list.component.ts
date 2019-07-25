@@ -11,6 +11,8 @@ import { HttpClient } from '@angular/common/http';
 import { MatSort, MatTableDataSource, MatPaginator, MatDialog, MatDialogConfig } from '@angular/material';
 import { Observable, from, merge, of as observableOf } from 'rxjs';
 import { startWith, switchMap, map, catchError } from 'rxjs/operators';
+import { Category } from 'src/app/shared/category.model';
+import { CategoryPanelComponent } from '../category-panel/category-panel.component';
 
 
 @Component({
@@ -96,7 +98,8 @@ export class RecordListComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
-    this.dialog.open(RecordComponent).afterClosed().subscribe(result =>{
+    this.router.navigateByUrl('/record')
+    this.dialog.open(CategoryPanelComponent).afterClosed().subscribe(result =>{
       this.refreshMatTable();
     });
   }

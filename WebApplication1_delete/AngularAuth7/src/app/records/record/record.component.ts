@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Record } from 'src/app/shared/record.model';
 import { MatDialogRef} from '@angular/material';
+import { CategoryService } from 'src/app/shared/category.service';
+import { Category } from 'src/app/shared/category.model';
 
 @Component({
   selector: 'app-record',
@@ -17,13 +19,18 @@ export class RecordComponent implements OnInit {
   imageRootPath : string = "http://localhost:62921/Images/40/";
   fileToUpload : File = null;
   imageByteArray : [];
-  record : Record;  
+  record : Record;
+  categories ;  
 
-  constructor(private service : RecordService,
+  constructor(private service : RecordService, private categoryService : CategoryService,
     private toastr : ToastrService, public dialogRef: MatDialogRef<RecordComponent>) { }
 
   ngOnInit() {
     console.log("ngOnInit");
+
+    this.categoryService.getCategories().then(res =>{
+      this.categories =  res as Category[];
+    });
    // this.service.formData.ImagePath = "default-image.png";
    // this.resetForm();
   }
