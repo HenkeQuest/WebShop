@@ -34,12 +34,15 @@ namespace WebApplication1_delete
         {
             //Inject AppSettings
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<AuthenticationContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddDbContext<RecordContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+
+            services.AddDbContext<CategoryContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
 
 

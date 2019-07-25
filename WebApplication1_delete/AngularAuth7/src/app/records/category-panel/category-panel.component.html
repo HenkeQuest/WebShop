@@ -1,0 +1,19 @@
+<p>
+  category-panel works!
+</p>
+
+<div *ngFor="let cat of categories">
+  {{cat.CategoryName}}
+</div>
+
+<div class="tab-header">
+  <h2 routerLink='/clothes'>Clothes</h2>
+  <h2 routerLink='/record' >records</h2>
+</div>
+<div class="row">
+  <div class="col-md-10 offset-md-1">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+
