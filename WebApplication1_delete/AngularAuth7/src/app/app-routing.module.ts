@@ -8,6 +8,9 @@ import { AuthGuard } from './auth/auth.guard';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { RecordDetailsComponent } from './records/record-details/record-details.component';
+import { ClothesComponent } from './records/clothes/clothes.component';
+import { RecordsComponent } from './records/records.component';
+import { RecordComponent } from './records/record/record.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'/user/login',pathMatch:'full'},
@@ -21,7 +24,15 @@ const routes: Routes = [
   {path:"home", component:HomeComponent,canActivate:[AuthGuard]},
   {path:"forbidden", component:ForbiddenComponent},
   {path:"record/:id", component:RecordDetailsComponent},
-  {path:"adminpanel", component:AdminPanelComponent,canActivate:[AuthGuard],data : {permittedRoles:['Admin']}}
+  {path:"clothes", component:ClothesComponent},
+  {path:"record", component:RecordComponent},
+  { 
+    path:"adminpanel", component:AdminPanelComponent,canActivate:[AuthGuard],data : {permittedRoles:['Admin']},
+    children: [
+      { path: "clothes", component: ClothesComponent},
+      { path: "record", component: RecordComponent}
+    ]
+  }
 ];
 
 @NgModule({
