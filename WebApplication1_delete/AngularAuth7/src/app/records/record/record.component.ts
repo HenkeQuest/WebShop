@@ -27,7 +27,7 @@ export class RecordComponent implements OnInit {
 
   ngOnInit() {
     console.log("ngOnInit");
-
+    this.imageUrl = "http://localhost:62921/Images/40/default-image.png"
     this.categoryService.getCategories().then(res =>{
       this.categories =  res as Category[];
     });
@@ -45,7 +45,10 @@ export class RecordComponent implements OnInit {
       Year : "",
       Genre : "",
       Image : null,
-      ImagePath : ""
+      ImagePath : "",
+      Title: "",
+      Price: "",
+      Category: ""
     }
     this.service.formData.ImagePath = "default-image.png";
     this.imageUrl = this.imageRootPath + "default-image.png";
@@ -63,13 +66,18 @@ export class RecordComponent implements OnInit {
 
   onFileSelected(file : FileList){
     this.fileToUpload = file.item(0);
+    const inputNode: any = document.querySelector('#file');
+    console.log("this.fileToUpload: ", this.fileToUpload);
+    console.log("inputNode: ", this.fileToUpload);
 
-    //Show image preview
-    var reader = new FileReader();
-    reader.onload = (event:any) => {
-      this.imageUrl = event.target.result;
-      this.service.formData.ImagePath = event.target.result;
-      this.imageUrl = event.target.result;
+    if (typeof (FileReader) !== 'undefined') {
+      //Show image preview
+      var reader = new FileReader();
+      reader.onload = (event:any) => {
+        console.log("this.fileToUpload: ", event.target);
+        this.service.formData.ImagePath = "";
+        //this.imageUrl = event.target.result;
+      }
     }
 
     reader.readAsDataURL(this.fileToUpload);

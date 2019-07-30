@@ -1,5 +1,5 @@
 <table class="table table-hover">
-  <tr *ngFor="let rec of service.list">
+  <tr *ngFor="let rec of recordService.list">
     <td (click)="details(rec.RecordID)">{{rec.Band}}-{{rec.Album}}</td>
     <td (click)="populateForm(rec)">{{rec.Year}}</td>
     <td (click)="populateForm(rec)">
@@ -31,21 +31,17 @@
 
 <div class="mat-elevation-z8">
   <mat-table [dataSource]="listData" matSort>
-    <ng-container matColumnDef="Band">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Band</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.Band}}</mat-cell>
+    <ng-container matColumnDef="Title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Title}}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="Album">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Album</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.Album}}</mat-cell>
+    <ng-container matColumnDef="Price">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Price}}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="Year">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Year</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.Year}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="Genre">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Genre</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.Genre}}</mat-cell>
+    <ng-container matColumnDef="Category">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Category</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Category}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="ImagePath">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Image</mat-header-cell>
@@ -72,8 +68,8 @@
       </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':service.list!=null}"></mat-footer-row>
-    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(service.list!=null && service.list.length==0)}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':recordService.list!=null}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(recordService.list!=null && recordService.list.length==0)}"></mat-footer-row>
   </mat-table>
   <mat-paginator [pageSizeOptions]="[5,10,25,100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
 </div>

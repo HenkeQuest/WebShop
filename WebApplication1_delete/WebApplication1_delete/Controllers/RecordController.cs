@@ -87,11 +87,13 @@ namespace WebApplication1_delete.Controllers
             //the view model and the database model does not match because of the file
             Record record = new Record();
             record.Band = Request.Form["Band"];
-            Debug.WriteLine("After form request");
             record.Album = Request.Form["Album"];
             record.Year = Request.Form["Year"];
             record.Genre = Request.Form["Genre"];
             record.ImagePath = Request.Form["ImagePath"];
+            record.Category = Request.Form["Category"];
+            record.Title = Request.Form["Title"];
+            record.Price = Request.Form["Price"];
             record.RecordID = id;
 
 
@@ -175,6 +177,9 @@ namespace WebApplication1_delete.Controllers
             record.Album = Request.Form["Album"];
             record.Year = Request.Form["Year"];
             record.Genre = Request.Form["Genre"];
+            record.Category = Request.Form["Category"];
+            record.Title = Request.Form["Title"];
+            record.Price = Request.Form["Price"];
             record.ImagePath = Request.Form["ImagePath"]; ;
 
             Debug.WriteLine("Imageeeeeeeeeeeeeeeeeeeeeeeeeee: " );
@@ -211,6 +216,7 @@ namespace WebApplication1_delete.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message);
                 return StatusCode(500, "Internal server error");
             }
 
@@ -248,20 +254,10 @@ namespace WebApplication1_delete.Controllers
         }
 
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)
-
         {
-
-            //---------------< Image_resize() >---------------
-
             //*Resizes an Image in Asp.Net MVC Core 2
 
             //*Using Nuget CoreCompat.System.Drawing
-
-            //using System.IO
-            //using System.Drawing;             //CoreCompat
-            //using System.Drawing.Drawing2D;   //CoreCompat
-            //using System.Drawing.Imaging;     //CoreCompat
-
             const long quality = 50L;
             Bitmap source_Bitmap = new Bitmap(input_Image_Path);
 
@@ -271,44 +267,33 @@ namespace WebApplication1_delete.Controllers
 
             int new_Height = (int)(new_Width * relation_heigth_width);
 
-
-            //< create Empty Drawarea >
+            //create Empty Drawarea
             var new_DrawArea = new Bitmap(new_Width, new_Height);
 
-            //</ create Empty Drawarea >
-            
+            //create Empty Drawarea
             using (var graphic_of_DrawArea = Graphics.FromImage(new_DrawArea))
             {
-                //< setup >
+                //setup
                 graphic_of_DrawArea.CompositingQuality = CompositingQuality.HighSpeed;
                 graphic_of_DrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphic_of_DrawArea.CompositingMode = CompositingMode.SourceCopy;
 
-                //</ setup >
-                //< draw into placeholder >
-
                 //*imports the image into the drawarea
                 graphic_of_DrawArea.DrawImage(source_Bitmap, 0, 0, new_Width, new_Height);
 
-                //</ draw into placeholder >
-                //--< Output as .Jpg >--
-                Debug.WriteLine("output_Image_Path: " + output_Image_Path);
-
-                Debug.WriteLine("after catch: " + output_Image_Path);
-                //output_Image_Path = newpath;
+                //Output as .Jpg
                 try
                 {
                     using (var output = System.IO.File.Open(output_Image_Path, FileMode.Create))
                     {
                         Debug.WriteLine("output: " + output);
-                        //< setup jpg >
+                        //Setup jpg
                         var qualityParamId = Encoder.Quality;
                         var encoderParameters = new EncoderParameters(1);
 
                         encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
 
-                        //</ setup jpg >
-                        //< save Bitmap as Jpg >
+                        //save Bitmap as Jpg
                         var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
 
 
@@ -316,7 +301,6 @@ namespace WebApplication1_delete.Controllers
                         //resized_Bitmap.Dispose();
 
                         output.Close();
-                        //</ save Bitmap as Jpg >
                     }
                 }
                 catch(Exception ex)
@@ -324,12 +308,10 @@ namespace WebApplication1_delete.Controllers
                     Debug.WriteLine("ex: " + ex);
                 }
 
-                //--</ Output as .Jpg >--
+                //Output as .Jpg
                 graphic_of_DrawArea.Dispose();
             }
-
             source_Bitmap.Dispose();
-            //---------------</ Image_resize() >---------------
         }
     }
 }

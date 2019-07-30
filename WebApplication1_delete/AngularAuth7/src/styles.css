@@ -137,3 +137,20 @@ mat-footer-row mat-footer-cell{
             width: 32px;
         }
 
+
+div.container{
+    margin: 0px 40px;
+}
+
+.fill-remaining-space{
+    flex: 1 1 auto;
+}
+
+.controls-container{
+    width: 100%;
+    padding: 5%;
+}
+
+.controls-container > *{
+    width: 100%;
+}
