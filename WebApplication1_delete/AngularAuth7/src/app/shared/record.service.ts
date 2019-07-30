@@ -27,7 +27,6 @@ export class RecordService {
       ref.orderBy('Band','desc')
     );
 
-    console.log("");
     this.formData = new Record;
     this.formData.Band = "";
     this.formData.Album = "";
@@ -36,6 +35,9 @@ export class RecordService {
     this.formData.Image = null;
     this.formData.ImagePath = "";
     this.formData.RecordID = 0;
+    this.formData.Title = "";
+    this.formData.Price = "";
+    this.formData.Category = "Record";
   }
 
   getRecordFromFB(){
@@ -59,6 +61,9 @@ export class RecordService {
     formData.append("Genre", modelFormData.Genre);
     formData.append("Image", fileToUpload, fileToUpload.name);
     formData.append("ImagePath", modelFormData.ImagePath);
+    formData.append("Title", modelFormData.Title);
+    formData.append("Price", modelFormData.Price);
+    formData.append("Category", modelFormData.Category);
 
     return this.http.post(this.rootURL+"/Record", formData)
   }
@@ -75,6 +80,9 @@ export class RecordService {
       formData.append("Image", fileToUpload, fileToUpload.name);
     }
     formData.append("ImagePath", modelFormData.ImagePath);
+    formData.append("Title", modelFormData.Title);
+    formData.append("Price", modelFormData.Price);
+    formData.append("Category", modelFormData.Category);
 
     this.getRecords();
     return this.http.put(this.rootURL+"/Record/"+modelFormData.RecordID,formData);
@@ -96,7 +104,5 @@ export class RecordService {
     return from(this.http.get(this.rootURL+"/Record").toPromise());
   }
 
-  populateForm(record){
-    
-  }
+
 }

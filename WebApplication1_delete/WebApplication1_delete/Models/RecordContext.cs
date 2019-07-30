@@ -18,5 +18,7 @@ namespace WebApplication1_delete.Models
         public DbSet<Record> Records { get; set; }
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Clothing> Clothings { get; set; }
     }
 }

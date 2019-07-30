@@ -10,6 +10,7 @@ import { Category } from 'src/app/shared/category.model';
 export class CategoryPanelComponent implements OnInit {
 
   categories :  Category[];
+
   constructor(private categoryService : CategoryService) { }
 
   ngOnInit() {

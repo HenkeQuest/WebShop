@@ -1,15 +1,18 @@
 <p>
-  category-panel works!
+  Select category
 </p>
 
-<div *ngFor="let cat of categories">
-  {{cat.CategoryName}}
-</div>
 
-<div class="tab-header">
-  <h2 routerLink='/clothes'>Clothes</h2>
-  <h2 routerLink='/record' >records</h2>
-</div>
+  <mat-form-field>
+    <mat-select  placeholder="Categories">
+      <mat-option>None</mat-option>
+      <ng-container *ngFor="let cat of categories">
+        <mat-option value="{{cat.CategoryName}}" routerLink='/{{cat.CategoryRoute}}'>{{cat.CategoryName}}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+
 <div class="row">
   <div class="col-md-10 offset-md-1">
     <router-outlet></router-outlet>
