@@ -6,4 +6,7 @@ export class Record {
     Genre : string;
     Image :  File;
     ImagePath : string;
+    Title: string;
+    Price: string;
+    Category: string;
 }

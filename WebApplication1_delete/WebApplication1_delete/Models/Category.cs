@@ -14,6 +14,8 @@ namespace WebApplication1_delete.Models
 
         [Column(TypeName = "nvarchar(100)")]
         public string CategoryName { get; set; }
-        
+        [Column(TypeName = "nvarchar(100)")]
+        public string CategoryRoute { get; set; }
+
     }
 }
