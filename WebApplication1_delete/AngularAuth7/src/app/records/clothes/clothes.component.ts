@@ -4,6 +4,7 @@ import { ClothingService } from 'src/app/shared/clothing.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialogRef } from '@angular/material';
+import { RecordService } from 'src/app/shared/record.service';
 
 @Component({
   selector: 'app-clothes',
@@ -16,15 +17,18 @@ export class ClothesComponent implements OnInit {
   imageUrl ="http://localhost:62921/Images/40/default-image.png";
   fileToUpload: File;
   
-  constructor(private clothingService : ClothingService, private toastr : ToastrService,
+  constructor(private clothingService : ClothingService,
+              private recordService : RecordService, 
+              private toastr : ToastrService,
               public dialogRef: MatDialogRef<ClothesComponent>) { 
-    console.log("Imagepath: ", clothingService.form.value.ImagePath);
   }
 
   ngOnInit() {
     this.clothingService.getClothing().then( res =>{
       this.clothing = res as Clothing[];
     });
+
+    this.clothingService.form.controls["ID"].disable();
   }
 
   onFileSelected(file : FileList) {
@@ -37,7 +41,7 @@ export class ClothesComponent implements OnInit {
       reader.onload = (event: any) => {
         console.log("event.target: ", event);
         console.log("inputNode.files[0]: ", inputNode.files[0]);
-        this.imageUrl = event.target.result;
+        this.clothingService.imageUrl = event.target.result;
         this.clothingService.form.value.ImagePath = inputNode.files[0].name;
         
       };
@@ -47,26 +51,34 @@ export class ClothesComponent implements OnInit {
     }
   }
 
+  onClear() {
+    this.clothingService.form.reset();
+    this.clothingService.initializeFormGroup();
+  }
+
   onSubmit(){
     this.clothingService.form.value;
     console.log("form: ", this.clothingService.form.value);
-    if(this.clothingService.form.value.ClothingID == 0){
+    if(this.clothingService.form.value.ID){
       this.insertClothing(this.clothingService.form);
     }
-    // else{
-    //   form.value.ImagePath = this.clothingService.formData.ImagePath;
-    //   this.updateRecord(form);
-    // }
+    else{
+      this.updateRecord(this.clothingService.form);
+    }
+    this.clothingService.form.reset();
+    this.clothingService.initializeFormGroup();
+    this.dialogRef.close();
+  }
+
+  onClose() {
+    this.clothingService.form.reset();
+    this.clothingService.initializeFormGroup();
+    this.dialogRef.close();
   }
 
   insertClothing(form : any){
-    console.log("form: ", form);
-    console.log("this.fileToUpload: ", this.fileToUpload);
     this.clothingService.postClothing(form.value, this.fileToUpload).subscribe(res => {
       this.toastr.success("inserted successfully", 'EMP. Register');
-      this.clothingService.form.reset();
-      this.clothingService.initializeFormGroup();
-      this.dialogRef.close();
     },
     err =>{
       debugger;
@@ -74,14 +86,11 @@ export class ClothesComponent implements OnInit {
     });
   }
 
-  // updateRecord(form : NgForm){
-  //   console.log("form.value: ", form.value);
-  //   this.clothingService.putRecord(form.value, this.fileToUpload).subscribe(res =>{
-  //     this.toastr.info("updated successfully", 'EMP. Register');
-  //     // this.resetForm(form);
-  //     this.service.refreshList();
-  //     this.dialogRef.close();
-  //   });
-  // }
+  updateRecord(form : any){
+    console.log("form.value: ", form.value);
+    this.clothingService.putClothing(form.value, this.fileToUpload).subscribe(res =>{
+      this.toastr.info("updated successfully", 'EMP. Register');
+    });
+  }
 
 }

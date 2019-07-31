@@ -10,13 +10,14 @@ import { Clothing } from './clothing.model';
 export class ClothingService {
 
   readonly rootURL = "http://localhost:62921/api";
+  imageUrl: string = "http://localhost:62921/Images/40/default-image.png";
 
   formData : Clothing;
 
   constructor(private http : HttpClient) { 
 
     this.formData = new Clothing;
-    this.formData.ClothingID = 0;
+    this.formData.ID = 0;
     this.formData.Title = "";
     this.formData.Price = "";
     this.formData.Size = "";
@@ -27,7 +28,7 @@ export class ClothingService {
   }
 
   form: FormGroup = new FormGroup({
-    ClothingID: new FormControl(0),
+    ID: new FormControl(null),
     Title: new FormControl(""),
     Price: new FormControl(""),
     Size: new FormControl(""),
@@ -39,7 +40,7 @@ export class ClothingService {
 
   initializeFormGroup() {
     this.form.setValue({
-      ClothingID: 0,
+      ID: null,
       Title: '',
       Price: '',
       Size: '',
@@ -58,17 +59,40 @@ export class ClothingService {
   postClothing(modelFormData : Clothing, fileToUpload: File ){
     const formData: FormData = new FormData;
 
-    
-
     formData.append("Title", modelFormData.Title);
     formData.append("Price", modelFormData.Price);
     formData.append("Size", modelFormData.Size);
     formData.append("Description", modelFormData.Description);
     formData.append("Image", fileToUpload, fileToUpload.name);
     formData.append("ImagePath", modelFormData.ImagePath);
+    formData.append("Category", modelFormData.Category);
 
     console.log("modelFormData: ", modelFormData);
 
     return this.http.post(this.rootURL+"/Clothing", formData)
   }
+
+  putClothing(modelFormData : Clothing, fileToUpload: File ){
+    const formData: FormData = new FormData;
+
+    formData.append("Title", modelFormData.Title);
+    formData.append("ID", modelFormData.ID.toString());
+    formData.append("Price", modelFormData.Price);
+    formData.append("Size", modelFormData.Size);
+    formData.append("Description", modelFormData.Description);
+    if(fileToUpload != null){
+      formData.append("Image", fileToUpload, fileToUpload.name);
+    }
+    formData.append("ImagePath", modelFormData.ImagePath);
+    formData.append("Category", modelFormData.Category);
+
+    console.log("modelFormData: ", modelFormData);
+
+    return this.http.put(this.rootURL+"/Clothing/"+modelFormData.ID, formData)
+  }
+
+  populateForm(employee) {
+    this.form.setValue(employee);
+  }
+
 }

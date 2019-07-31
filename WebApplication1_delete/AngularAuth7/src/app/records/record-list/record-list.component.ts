@@ -14,6 +14,7 @@ import { startWith, switchMap, map, catchError } from 'rxjs/operators';
 import { Category } from 'src/app/shared/category.model';
 import { CategoryPanelComponent } from '../category-panel/category-panel.component';
 import { ClothingService } from 'src/app/shared/clothing.service';
+import { ClothesComponent } from '../clothes/clothes.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ import { ClothingService } from 'src/app/shared/clothing.service';
 })
 export class RecordListComponent implements OnInit {
 
-  displayedColumns: string[] = ["Title","Price","Category","ImagePath","actions"];
+  displayedColumns: string[] = ["ID","Title","Price","Category","ImagePath","actions"];
   listData = new MatTableDataSource<Record>();
   recordsFB : Observable<Record[]>
   searchResult;
@@ -38,7 +39,7 @@ export class RecordListComponent implements OnInit {
     private user : UserService, 
     private dialog : MatDialog, 
     private cdr: ChangeDetectorRef,
-    private clothService : ClothingService) {}
+    private clothingService : ClothingService) {}
 
   ngOnInit() {
     this.recordService.formData.ImagePath = "default-image.png";
@@ -52,10 +53,9 @@ export class RecordListComponent implements OnInit {
     this.recordService.refreshList().subscribe(res =>{
 
       let array = Array();
-      this.clothService.getClothing().then(res => {
+      this.clothingService.getClothing().then(res => {
         
         res.forEach(item =>{
-          console.log("clothing item:", item);
           array.push(item);
         })
 
@@ -92,10 +92,20 @@ export class RecordListComponent implements OnInit {
     return this.user.roleMatch(["Admin"]);
   }
 
-  populateForm(rec : Record){
+  populateRecordForm(rec : Record){
     console.log("rec.ImagePath: ", rec.ImagePath);
     this.recordService.formData = Object.assign({}, rec);
-    //this.service.formData.ImagePath = rec.ImagePath;
+    this.recordService.formData.ImagePath = rec.ImagePath;
+    this.recordService.imageUrl = "http://localhost:62921/Images/40/"+rec.ImagePath; 
+    
+  }
+
+  populateClothingForm(rec : any){
+    console.log("this.clothingService.form.value: ", this.clothingService.form.value);
+    console.log("rec: ", rec);
+    this.clothingService.populateForm(rec);
+    //this.clothingService.form.value.ImagePath = rec.ImagePath;
+    this.clothingService.imageUrl = "http://localhost:62921/Images/40/"+rec.ImagePath; 
     
   }
 
@@ -104,6 +114,7 @@ export class RecordListComponent implements OnInit {
       this.recordService.deleteRecord(id).subscribe(res=>{
         this.toastr.warning("Deleted successfully", 'EMP. Register');
         this.recordService.refreshList();
+        this.refreshMatTable();
       })
     }
   }
@@ -114,25 +125,44 @@ export class RecordListComponent implements OnInit {
   }
 
   onCreate(){
-    this.recordService.formData.ImagePath = "default-image.png";
+    this.recordService.imageUrl = "http://localhost:62921/Images/40/default-image.png";
+    this.clothingService.imageUrl = "http://localhost:62921/Images/40/default-image.png";
+    this.recordService.initializeFormGroup();
+    this.clothingService.initializeFormGroup();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
-    this.router.navigateByUrl('/record')
+    this.router.navigateByUrl('/record');
     this.dialog.open(CategoryPanelComponent, dialogConfig).afterClosed().subscribe(result =>{
       this.refreshMatTable();
     });
   }
 
-  onEdit(row: Record){
+  onEdit(row: any){
     console.log("row: ", row);
     this.cdr.detectChanges();
-    this.populateForm(row);
 
-    this.dialog.open(RecordComponent).afterClosed().subscribe(result =>{
-      this.refreshMatTable();
-    });
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    
+
+    if(row.Category == "Record"){
+      this.populateRecordForm(row);
+      this.dialog.open(RecordComponent, dialogConfig).afterClosed().subscribe(result =>{
+        this.refreshMatTable();
+      });
+    }
+    else if(row.Category == "Clothing"){
+      this.populateClothingForm(row);
+      this.dialog.open(ClothesComponent, dialogConfig).afterClosed().subscribe(result =>{
+        this.refreshMatTable();
+      });
+    }
+
+    
   }
 
 }
