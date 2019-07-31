@@ -16,8 +16,8 @@ export class RecordDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.service.list.forEach((rec: Record) => {
-        console.log("rec: " + rec.RecordID);
-        if (rec.RecordID == params.id) {
+        console.log("rec: " + rec.ID);
+        if (rec.ID == params.id) {
           this.record = rec;
         }
       });

@@ -18,7 +18,8 @@ export class RecordService {
 
   formData : Record;
   list : Record[];
-  readonly rootURL = "http://localhost:62921/api"
+  readonly rootURL = "http://localhost:62921/api";
+  imageUrl: string = "http://localhost:62921/Images/40/default-image.png";
 
   recordsCollection: AngularFirestoreCollection<Record>;
 
@@ -27,6 +28,10 @@ export class RecordService {
       ref.orderBy('Band','desc')
     );
 
+   this.initializeFormGroup();
+  }
+
+  initializeFormGroup() {
     this.formData = new Record;
     this.formData.Band = "";
     this.formData.Album = "";
@@ -34,7 +39,7 @@ export class RecordService {
     this.formData.Year = "";
     this.formData.Image = null;
     this.formData.ImagePath = "";
-    this.formData.RecordID = 0;
+    this.formData.ID = 0;
     this.formData.Title = "";
     this.formData.Price = "";
     this.formData.Category = "Record";
@@ -55,6 +60,8 @@ export class RecordService {
   postRecord(modelFormData : Record,fileToUpload: File ){
     const formData: FormData = new FormData;
 
+    console.log("modelFormData: ", modelFormData);
+
     formData.append("Band", modelFormData.Band);
     formData.append("Album", modelFormData.Album);
     formData.append("Year", modelFormData.Year);
@@ -72,7 +79,7 @@ export class RecordService {
     const formData: FormData = new FormData;
 
     formData.append("Band", modelFormData.Band);
-    formData.append("RecordId", modelFormData.RecordID.toString());
+    formData.append("ID", modelFormData.ID.toString());
     formData.append("Album", modelFormData.Album);
     formData.append("Year", modelFormData.Year);
     formData.append("Genre", modelFormData.Genre);
@@ -85,7 +92,7 @@ export class RecordService {
     formData.append("Category", modelFormData.Category);
 
     this.getRecords();
-    return this.http.put(this.rootURL+"/Record/"+modelFormData.RecordID,formData);
+    return this.http.put(this.rootURL+"/Record/"+modelFormData.ID,formData);
   }
 
   deleteRecord(id: number){

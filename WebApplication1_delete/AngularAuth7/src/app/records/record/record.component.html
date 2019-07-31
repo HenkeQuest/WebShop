@@ -1,39 +1,39 @@
 <form #form="ngForm" (submit)="onSubmit(form)" autocomplete="on">
-  <input type="hidden" name="RecordID" [value]="service.formData.RecordID">
+  <input type="hidden" name="Category" [(ngModel)]="recordService.formData.Category" [value]="recordService.formData.Category">
   <div class="form-group">
     <label>RecordID</label>
-    <input  name="RecordID" #RecordID="ngModel" [(ngModel)]="service.formData.RecordID" class="form-control" required>
+    <input  name="ID" #ID="ngModel" [(ngModel)]="recordService.formData.ID" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Title</label>
-    <input  name="Title" #Title="ngModel" [(ngModel)]="service.formData.Title" class="form-control" required>
+    <input  name="Title" #Title="ngModel" [(ngModel)]="recordService.formData.Title" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Price</label>
-    <input  name="Price" #Price="ngModel" [(ngModel)]="service.formData.Price" class="form-control" required>
+    <input  name="Price" #Price="ngModel" [(ngModel)]="recordService.formData.Price" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Band</label>
-    <input  name="Band" #Band="ngModel" [(ngModel)]="service.formData.Band" class="form-control" required>
+    <input  name="Band" #Band="ngModel" [(ngModel)]="recordService.formData.Band" class="form-control" required>
     <div class="validation-error" *ngIf="Band.invalid && Band.touched">This field is required</div>
   </div>
   <div class="form-group">
     <label>Album</label>
-    <input  name="Album" #Album="ngModel" [(ngModel)]="service.formData.Album" class="form-control" required>
+    <input  name="Album" #Album="ngModel" [(ngModel)]="recordService.formData.Album" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Image</label>
-    <img [src]="imageUrl" style="width: 250px; height: 200px">
-    <input  type="file" #Image="ngModel" (change)="onFileSelected($event.target.files)" accept="image/*" name="Image"  [(ngModel)]="service.formData.Image" class="form-control">
+    <img [src]="recordService.imageUrl" style="width: 250px; height: 200px">
+    <input  type="file" #Image="ngModel" (change)="onFileSelected($event.target.files)" accept="image/*" name="Image"  [(ngModel)]="recordService.formData.Image" class="form-control">
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>Year</label>
-      <input  name="Year" #Year="ngModel" [(ngModel)]="service.formData.Year" class="form-control" required>
+      <input  name="Year" #Year="ngModel" [(ngModel)]="recordService.formData.Year" class="form-control" required>
     </div>
     <div class="form-group col-md-6">
       <label>Genre</label>
-      <input  name="Genre" #Genre="ngModel" [(ngModel)]="service.formData.Genre" class="form-control" required>
+      <input  name="Genre" #Genre="ngModel" [(ngModel)]="recordService.formData.Genre" class="form-control" required>
     </div>
   </div>
   <div class="form-group">

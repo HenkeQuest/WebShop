@@ -1,6 +1,6 @@
 <table class="table table-hover">
   <tr *ngFor="let rec of recordService.list">
-    <td (click)="details(rec.RecordID)">{{rec.Band}}-{{rec.Album}}</td>
+    <td (click)="details(rec.ID)">{{rec.Band}}-{{rec.Album}}</td>
     <td (click)="populateForm(rec)">{{rec.Year}}</td>
     <td (click)="populateForm(rec)">
       <!-- <img [src]='rec.ImagePath | safe' height="40px" width="40px" alt='{{rec.ImagePath}}'> -->
@@ -10,7 +10,7 @@
     <div *ngIf="isAdmin()">
       <td>
         <a class="btn btn-sm btn-info text-white" ><i class="fa fa-pencil"></i></a>
-        <a class="btn btn-sm btn-danger text-white ml-1" (click)="onDelete(rec.RecordID)"><i class="fa fa-trash"></i></a>
+        <a class="btn btn-sm btn-danger text-white ml-1" (click)="onDelete(rec.ID)"><i class="fa fa-trash"></i></a>
       </td>
     </div>
   </tr>
@@ -31,6 +31,10 @@
 
 <div class="mat-elevation-z8">
   <mat-table [dataSource]="listData" matSort>
+    <ng-container matColumnDef="ID">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.ID}}</mat-cell>
+      </ng-container>
     <ng-container matColumnDef="Title">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.Title}}</mat-cell>
@@ -53,7 +57,7 @@
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
         <button mat-icon-button (click)="onEdit(row)"><mat-icon>launch</mat-icon></button>
-        <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="onDelete(row.ID)"><mat-icon>delete_outline</mat-icon></button>
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="loading">
@@ -68,8 +72,8 @@
       </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':recordService.list!=null}"></mat-footer-row>
-    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(recordService.list!=null && recordService.list.length==0)}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':listData!=null}"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(listData!=null && listData.length==0)}"></mat-footer-row>
   </mat-table>
   <mat-paginator [pageSizeOptions]="[5,10,25,100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
 </div>

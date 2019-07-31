@@ -1,5 +1,5 @@
 export class Record {
-    RecordID :number;
+    ID :number;
     Band : string;
     Album : string;
     Year : string;

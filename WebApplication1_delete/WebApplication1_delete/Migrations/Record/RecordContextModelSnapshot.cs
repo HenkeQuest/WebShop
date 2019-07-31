@@ -19,55 +19,9 @@ namespace WebApplication1_delete.Migrations.Record
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WebApplication1_delete.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("CategoryRoute")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("CategoryID");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("WebApplication1_delete.Models.Clothing", b =>
-                {
-                    b.Property<int>("ClothingID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(MAX)");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Price")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Size")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("ClothingID");
-
-                    b.ToTable("Clothings");
-                });
-
             modelBuilder.Entity("WebApplication1_delete.Models.Record", b =>
                 {
-                    b.Property<int>("RecordID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -79,6 +33,9 @@ namespace WebApplication1_delete.Migrations.Record
 
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Genre")
                         .HasColumnType("nvarchar(250)");
@@ -99,7 +56,7 @@ namespace WebApplication1_delete.Migrations.Record
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("RecordID");
+                    b.HasKey("ID");
 
                     b.ToTable("Records");
                 });
