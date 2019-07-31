@@ -94,7 +94,8 @@ namespace WebApplication1_delete.Controllers
             record.Category = Request.Form["Category"];
             record.Title = Request.Form["Title"];
             record.Price = Request.Form["Price"];
-            record.RecordID = id;
+            record.Description = Request.Form["Description"];
+            record.ID = id;
 
 
 
@@ -138,9 +139,9 @@ namespace WebApplication1_delete.Controllers
                 //return BadRequest(ModelState);
             }
 
-            if (id.ToString() != Request.Form["RecordId"])
+            if (id.ToString() != Request.Form["ID"])
             {
-                Debug.WriteLine("id match: " + id + " == " + Request.Form["RecordId"]);
+                Debug.WriteLine("id match: " + id + " == " + Request.Form["ID"]);
                 return BadRequest();
             }
 
@@ -223,7 +224,7 @@ namespace WebApplication1_delete.Controllers
             _context.Records.Add(record);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRecord", new { id = record.RecordID }, record);
+            return CreatedAtAction("GetRecord", new { id = record.ID }, record);
         }
 
         // DELETE: api/Record/5
@@ -250,7 +251,7 @@ namespace WebApplication1_delete.Controllers
 
         private bool RecordExists(int id)
         {
-            return _context.Records.Any(e => e.RecordID == id);
+            return _context.Records.Any(e => e.ID == id);
         }
 
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)

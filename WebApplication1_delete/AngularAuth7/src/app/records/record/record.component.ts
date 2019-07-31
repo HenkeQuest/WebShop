@@ -22,12 +22,12 @@ export class RecordComponent implements OnInit {
   record : Record;
   categories ;  
 
-  constructor(private service : RecordService, private categoryService : CategoryService,
+  constructor(private recordService : RecordService, private categoryService : CategoryService,
     private toastr : ToastrService, public dialogRef: MatDialogRef<RecordComponent>) { }
 
   ngOnInit() {
     console.log("ngOnInit");
-    this.imageUrl = "http://localhost:62921/Images/40/default-image.png"
+    
     this.categoryService.getCategories().then(res =>{
       this.categories =  res as Category[];
     });
@@ -38,8 +38,8 @@ export class RecordComponent implements OnInit {
   resetForm(form? : NgForm){
     if (form != null)
       form.resetForm();
-    this.service.formData = {
-      RecordID : 0,
+    this.recordService.formData = {
+      ID : 0,
       Band : "tytyty",
       Album : "",
       Year : "",
@@ -50,16 +50,17 @@ export class RecordComponent implements OnInit {
       Price: "",
       Category: ""
     }
-    this.service.formData.ImagePath = "default-image.png";
+    this.recordService.formData.ImagePath = "default-image.png";
     this.imageUrl = this.imageRootPath + "default-image.png";
   }
 
   onSubmit(form : NgForm){
-    if(form.value.RecordID == 0){
+    if(form.value.ID == 0){
+      console.log("form: ", form.value);
       this.insertRecord(form);
     }
     else{
-      form.value.ImagePath = this.service.formData.ImagePath;
+      form.value.ImagePath = this.recordService.formData.ImagePath;
       this.updateRecord(form);
     }
   }
@@ -67,16 +68,17 @@ export class RecordComponent implements OnInit {
   onFileSelected(file : FileList){
     this.fileToUpload = file.item(0);
     const inputNode: any = document.querySelector('#file');
-    console.log("this.fileToUpload: ", this.fileToUpload);
-    console.log("inputNode: ", this.fileToUpload);
+    
 
     if (typeof (FileReader) !== 'undefined') {
       //Show image preview
       var reader = new FileReader();
       reader.onload = (event:any) => {
         console.log("this.fileToUpload: ", event.target);
-        this.service.formData.ImagePath = "";
-        //this.imageUrl = event.target.result;
+        console.log("this.fileToUpload: ", this.fileToUpload);
+        console.log("inputNode: ", this.fileToUpload);
+        this.recordService.formData.ImagePath = this.fileToUpload.name;
+        this.recordService.imageUrl = event.target.result;
       }
     }
 
@@ -84,10 +86,10 @@ export class RecordComponent implements OnInit {
   }
 
   insertRecord(form : NgForm){
-    this.service.postRecord(form.value, this.fileToUpload).subscribe(res => {
+    this.recordService.postRecord(form.value, this.fileToUpload).subscribe(res => {
       this.toastr.success("inserted successfully", 'EMP. Register');
       this.resetForm(form);
-      this.service.refreshList();
+      this.recordService.refreshList();
       this.dialogRef.close();
     },
     err =>{
@@ -98,10 +100,10 @@ export class RecordComponent implements OnInit {
 
   updateRecord(form : NgForm){
     console.log("form.value: ", form.value);
-    this.service.putRecord(form.value, this.fileToUpload).subscribe(res =>{
+    this.recordService.putRecord(form.value, this.fileToUpload).subscribe(res =>{
       this.toastr.info("updated successfully", 'EMP. Register');
       this.resetForm(form);
-      this.service.refreshList();
+      this.recordService.refreshList();
       this.dialogRef.close();
     });
   }

@@ -10,8 +10,7 @@ namespace WebApplication1_delete.Models
     public class Clothing
     {
         [Key]
-        public int ClothingID { get; set; }
-
+        public int ID { get; set; }
         [Column(TypeName = "nvarchar(100)")]
         public string Title { get; set; }
         [Column(TypeName = "nvarchar(100)")]
