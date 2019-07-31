@@ -21,10 +21,10 @@ namespace WebApplication1_delete.Controllers
     [ApiController]
     public class ClothingController : ControllerBase
     {
-        private readonly RecordContext _context;
+        private readonly ClothingContext _context;
         private readonly IHostingEnvironment _hostEnvironment;
 
-        public ClothingController(RecordContext context, IHostingEnvironment hostingEnvironment)
+        public ClothingController(ClothingContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _hostEnvironment = hostingEnvironment;
@@ -53,10 +53,66 @@ namespace WebApplication1_delete.Controllers
 
         // PUT: api/Clothing/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClothing(int id, Clothing clothing)
+        public async Task<IActionResult> PutClothing([FromRoute] int id)
         {
-            if (id != clothing.ClothingID)
+            Debug.WriteLine("dfds: " + id);
+            Debug.WriteLine("Before file request");
+            //instead of passing "[FromBody] Record record" as an argument we create a new record because
+            //the view model and the database model does not match because of the file
+            Clothing clothing = new Clothing();
+            clothing.Size = Request.Form["Size"];
+            clothing.Description = Request.Form["Description"];
+            clothing.ImagePath = Request.Form["ImagePath"];
+            clothing.Category = Request.Form["Category"];
+            clothing.Title = Request.Form["Title"];
+            clothing.Price = Request.Form["Price"];
+            clothing.ID = id;
+
+
+
+
+
+            Debug.WriteLine("Pass file request");
+            try
             {
+                IFormFile file = Request.Form.Files[0];
+                Debug.WriteLine("file: " + file.FileName);
+                if (file.Length > 0)
+                {
+                    Debug.WriteLine("file.Length: " + file.Length);
+                    var pathToSave = _hostEnvironment.WebRootPath + "\\Images\\40\\";
+
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    clothing.ImagePath = fileName;
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    //Image_resize(fullPath, pathToSave + "\\40\\" + fileName, 40);
+                }
+                else
+                {
+                    Console.WriteLine("No image selected");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("No image selected");
+                //return StatusCode(500, "Internal server error");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                //return BadRequest(ModelState);
+            }
+
+            if (id.ToString() != Request.Form["ID"])
+            {
+                Debug.WriteLine("id match: " + id + " == " + Request.Form["ID"]);
                 return BadRequest();
             }
 
@@ -64,6 +120,7 @@ namespace WebApplication1_delete.Controllers
 
             try
             {
+                Console.WriteLine("save changes");
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -77,6 +134,7 @@ namespace WebApplication1_delete.Controllers
                     throw;
                 }
             }
+
 
             return NoContent();
         }
@@ -92,7 +150,8 @@ namespace WebApplication1_delete.Controllers
             clothing.Size = Request.Form["Size"];
             clothing.Price = Request.Form["Price"];
             clothing.Description = Request.Form["Description"];
-            clothing.ImagePath = Request.Form["ImagePath"]; ;
+            clothing.ImagePath = Request.Form["ImagePath"];
+            clothing.Category = Request.Form["Category"]; ;
 
             //Create custom filename
             IFormFile file = Request.Form.Files[0];
@@ -131,8 +190,8 @@ namespace WebApplication1_delete.Controllers
             _context.Clothings.Add(clothing);
             await _context.SaveChangesAsync();
 
-            Console.WriteLine("clothing.ClothingID: " + clothing.ClothingID);
-            return CreatedAtAction("GetClothing", new { id = clothing.ClothingID }, clothing);
+            Console.WriteLine("clothing.ClothingID: " + clothing.ID);
+            return CreatedAtAction("GetClothing", new { id = clothing.ID }, clothing);
         }
 
         // DELETE: api/Clothing/5
@@ -153,7 +212,7 @@ namespace WebApplication1_delete.Controllers
 
         private bool ClothingExists(int id)
         {
-            return _context.Clothings.Any(e => e.ClothingID == id);
+            return _context.Clothings.Any(e => e.ID == id);
         }
 
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)

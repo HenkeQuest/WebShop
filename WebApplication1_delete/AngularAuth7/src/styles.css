@@ -154,3 +154,8 @@ div.container{
 .controls-container > *{
     width: 100%;
 }
+
+.add-bottom-padding{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

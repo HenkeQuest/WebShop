@@ -10,7 +10,7 @@ namespace WebApplication1_delete.Models
     public class Record
     {
         [Key]
-        public int RecordID { get; set; }
+        public int ID { get; set; }
         [Column(TypeName = "nvarchar(250)")]
         [Required]
         public string Title { get; set; }
@@ -26,6 +26,8 @@ namespace WebApplication1_delete.Models
         public byte[] Image { get; set; }
         [Column(TypeName = "nvarchar(250)")]
         public string ImagePath { get; set; }
+        [Column(TypeName = "nvarchar(250)")]
+        public string Description { get; set; }
         [Column(TypeName = "nvarchar(50)")]
         public string Price { get; set; }
         [Column(TypeName = "nvarchar(50)")]

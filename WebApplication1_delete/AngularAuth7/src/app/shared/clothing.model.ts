@@ -1,5 +1,5 @@
 export class Clothing {
-    ClothingID :number;
+    ID :number;
     Title: string;
     Size: string;
     Price: string;

@@ -13,9 +13,9 @@ namespace WebApplication1_delete.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly RecordContext _context;
+        private readonly CategoryContext _context;
 
-        public CategoryController(RecordContext context)
+        public CategoryController(CategoryContext context)
         {
             _context = context;
         }
