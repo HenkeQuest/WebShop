@@ -1,46 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Flag } from './flag.model';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Clothing } from './clothing.model';
-
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClothingService {
+export class FlagService {
 
   readonly rootURL = "http://localhost:62921/api";
   imageUrl: string = "http://localhost:62921/Images/40/default-image.png";
-  list: Clothing[];
-  formData : Clothing;
+
+  formData : Flag;
+  list : Flag[];
 
   constructor(private http : HttpClient) { 
 
-    this.formData = new Clothing;
+    this.formData = new Flag;
     this.formData.ID = 0;
     this.formData.Title = "";
     this.formData.Price = "";
-    this.formData.Size = "";
     this.formData.Image = null;
     this.formData.ImagePath = "";
     this.formData.Description = "";
-    this.formData.Category = "Clothing";
+    this.formData.Category = "flag";
 
-    this.getClothing().then(res =>{
-      this.list = res as Clothing[];
+    this.getFlag().then(res =>{
+      this.list = res as Flag[];
     })
-    
   }
 
   form: FormGroup = new FormGroup({
     ID: new FormControl(null),
     Title: new FormControl(""),
     Price: new FormControl(""),
-    Size: new FormControl(""),
     Image: new FormControl(null),
     ImagePath: new FormControl("default-image.png"),
     Description: new FormControl(""),
-    Category: new FormControl("Clothing")
+    Category: new FormControl("Flag")
   })
 
   initializeFormGroup() {
@@ -48,42 +45,40 @@ export class ClothingService {
       ID: null,
       Title: '',
       Price: '',
-      Size: '',
       Image: null,
       ImagePath: '',
       Description: '',
-      Category: 'Clothing'
+      Category: 'Flag'
     });
   }
 
 
-  getClothing(){
-    return this.http.get<Clothing[]>(this.rootURL + "/Clothing").toPromise();
+  getFlag(){
+    return this.http.get<Flag[]>(this.rootURL + "/flag").toPromise();
   }
 
-  postClothing(modelFormData : Clothing, fileToUpload: File ){
+  postFlag(modelFormData : Flag, fileToUpload: File ){
     const formData: FormData = new FormData;
+    console.log("modelFormData: ", modelFormData);
 
     formData.append("Title", modelFormData.Title);
     formData.append("Price", modelFormData.Price);
-    formData.append("Size", modelFormData.Size);
     formData.append("Description", modelFormData.Description);
     formData.append("Image", fileToUpload, fileToUpload.name);
     formData.append("ImagePath", modelFormData.ImagePath);
     formData.append("Category", modelFormData.Category);
 
-    console.log("modelFormData: ", modelFormData);
+    
 
-    return this.http.post(this.rootURL+"/Clothing", formData)
+    return this.http.post(this.rootURL+"/Flag", formData)
   }
 
-  putClothing(modelFormData : Clothing, fileToUpload: File ){
+  putFlag(modelFormData : Flag, fileToUpload: File ){
     const formData: FormData = new FormData;
 
     formData.append("Title", modelFormData.Title);
     formData.append("ID", modelFormData.ID.toString());
     formData.append("Price", modelFormData.Price);
-    formData.append("Size", modelFormData.Size);
     formData.append("Description", modelFormData.Description);
     if(fileToUpload != null){
       formData.append("Image", fileToUpload, fileToUpload.name);
@@ -93,15 +88,14 @@ export class ClothingService {
 
     console.log("modelFormData: ", modelFormData);
 
-    return this.http.put(this.rootURL+"/Clothing/"+modelFormData.ID, formData)
+    return this.http.put(this.rootURL+"/Flag/"+modelFormData.ID, formData)
   }
 
-  populateForm(clothing) {
-    this.form.setValue(clothing);
+  populateForm(flag) {
+    this.form.setValue(flag);
   }
 
-  deleteClothing(id: number){
-    return this.http.delete(this.rootURL+"/Clothing/"+id);
+  deleteFlag(id: number){
+    return this.http.delete(this.rootURL+"/Flag/"+id);
   }
-
 }

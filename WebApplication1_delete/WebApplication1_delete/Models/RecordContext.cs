@@ -17,6 +17,8 @@ namespace WebApplication1_delete.Models
 
         public DbSet<Record> Records { get; set; }
 
+        public DbSet<WebApplication1_delete.Models.Flag> Flag { get; set; }
+
         //public DbSet<Category> Categories { get; set; }
 
         //public DbSet<Clothing> Clothings { get; set; }
