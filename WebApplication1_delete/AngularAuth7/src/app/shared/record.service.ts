@@ -9,7 +9,7 @@ import {
 import { map } from 'rxjs/operators';
 import { from, Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material';
-import { RecordListComponent } from '../records/record-list/record-list.component';
+import { RecordListComponent } from '../admin-panel/record-list/record-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,9 @@ export class RecordService {
     );
 
    this.initializeFormGroup();
+   console.log("this.list: ", this.list);
+
+   this.refreshList();
   }
 
   initializeFormGroup() {

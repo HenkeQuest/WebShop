@@ -24,16 +24,22 @@ import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { RecordComponent } from './records/record/record.component';
-import { RecordListComponent } from './records/record-list/record-list.component';
-import { RecordsComponent } from './records/records.component';
+import { RecordComponent } from './admin-panel/record/record.component';
+import { RecordListComponent } from './admin-panel/record-list/record-list.component';
+import { RecordsComponent } from './home/records/records.component';
 import { SafePipe } from './pipe/pipe.component';
-import { RecordDetailsComponent } from './records/record-details/record-details.component';
+import { RecordDetailsComponent } from './home/records/record-details/record-details.component';
 import { RecordService } from './shared/record.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CategoryService } from './shared/category.service';
-import { CategoryPanelComponent } from './records/category-panel/category-panel.component';
-import { ClothesComponent } from './records/clothes/clothes.component';
+import { CategoryPanelComponent } from './admin-panel/category-panel/category-panel.component';
+import { ClothingComponent } from './admin-panel/clothing/clothing.component';
+import { FlagComponent } from './admin-panel/flag/flag.component';
+import { HomeService } from './shared/home.service';
+import { FlagsComponent } from './home/flags/flags.component';
+import { ClothingsComponent } from './home/clothings/clothings.component';
+import { ClothingDetailsComponent } from './home/clothings/clothing-details/clothing-details.component';
+import { FlagDetailsComponent } from './home/flags/flag-details/flag-details.component';
 
 
 
@@ -52,7 +58,12 @@ import { ClothesComponent } from './records/clothes/clothes.component';
     SafePipe,
     RecordDetailsComponent,
     CategoryPanelComponent,
-    ClothesComponent
+    ClothingComponent,
+    FlagComponent,
+    FlagsComponent,
+    ClothingsComponent,
+    ClothingDetailsComponent,
+    FlagDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +82,9 @@ import { ClothesComponent } from './records/clothes/clothes.component';
     AngularFireAuthModule,
     
   ],
+  exports: [
+    MaterialModule
+  ],
   providers: [
     UserService, {
     provide: HTTP_INTERCEPTORS,
@@ -80,6 +94,7 @@ import { ClothesComponent } from './records/clothes/clothes.component';
     CategoryPanelComponent,
     RecordService,
     CategoryService,
+    HomeService,
     { provide: MatDialogRef, useValue: {} },
 	  { provide: MAT_DIALOG_DATA, useValue: [] },
   ],

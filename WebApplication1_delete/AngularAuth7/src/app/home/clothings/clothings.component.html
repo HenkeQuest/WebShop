@@ -1,0 +1,23 @@
+<div class="album py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4" *ngFor="let rec of list">
+        <div class="card mb-4 box-shadow">
+          <a class="fancybox" rel="gallery" href="{{rec.imagePath}}">
+              <img class="card-img-top" src="http://localhost:62921/Images/40/{{rec.ImagePath}}" style="height: 225px; width: 100%; display: block;" alt="{{rec.Title}}" class="img img-responsive full-width thumbnail" />
+          </a>
+          <div class="card-body">
+            <p class="card-text">{{rec.ImagePath}}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button"  routerLink='../clothing/{{rec.ID}}' class="btn btn-sm btn-outline-secondary">View</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+              </div>
+              <small class="text-muted">9 mins</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

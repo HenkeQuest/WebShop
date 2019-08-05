@@ -7,7 +7,7 @@
     <mat-select  placeholder="Categories">
       <mat-option>None</mat-option>
       <ng-container *ngFor="let cat of categories">
-        <mat-option value="{{cat.CategoryName}}" routerLink='/{{cat.CategoryRoute}}'>{{cat.CategoryName}}</mat-option>
+        <mat-option value="{{cat.CategoryName}}" routerLink='adminpanel/{{cat.CategoryRoute}}'>{{cat.CategoryName}}</mat-option>
       </ng-container>
     </mat-select>
   </mat-form-field>
