@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Record } from 'src/app/shared/record.model';
 import { RecordService } from 'src/app/shared/record.service';
 import { ActivatedRoute } from '@angular/router';
+import { HomeComponent } from 'src/app/home/home.component';
+import { HomeService } from 'src/app/shared/home.service';
 
 @Component({
   selector: 'app-record-details',
@@ -11,11 +13,12 @@ import { ActivatedRoute } from '@angular/router';
 export class RecordDetailsComponent implements OnInit {
 
   record: Record;
-  constructor(private route: ActivatedRoute, private service : RecordService) { }
+  constructor(private route: ActivatedRoute, private recordService : RecordService, private homeService : HomeService ) { }
 
   ngOnInit() {
+    
     this.route.params.subscribe(params => {
-      this.service.list.forEach((rec: Record) => {
+      this.homeService.list.forEach((rec: Record) => {
         console.log("rec: " + rec.ID);
         if (rec.ID == params.id) {
           this.record = rec;

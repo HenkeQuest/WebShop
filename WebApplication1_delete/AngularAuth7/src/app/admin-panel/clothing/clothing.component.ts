@@ -7,11 +7,10 @@ import { MatDialogRef } from '@angular/material';
 import { RecordService } from 'src/app/shared/record.service';
 
 @Component({
-  selector: 'app-clothes',
-  templateUrl: './clothes.component.html',
-  styleUrls: ['./clothes.component.css']
+  selector: 'app-clothing',
+  templateUrl: './clothing.component.html'
 })
-export class ClothesComponent implements OnInit {
+export class ClothingComponent implements OnInit {
 
   clothing : Clothing [];
   imageUrl ="http://localhost:62921/Images/40/default-image.png";
@@ -20,7 +19,7 @@ export class ClothesComponent implements OnInit {
   constructor(private clothingService : ClothingService,
               private recordService : RecordService, 
               private toastr : ToastrService,
-              public dialogRef: MatDialogRef<ClothesComponent>) { 
+              public dialogRef: MatDialogRef<ClothingComponent>) { 
   }
 
   ngOnInit() {
@@ -28,7 +27,6 @@ export class ClothesComponent implements OnInit {
       this.clothing = res as Clothing[];
     });
 
-    this.clothingService.form.controls["ID"].disable();
   }
 
   onFileSelected(file : FileList) {
@@ -59,11 +57,11 @@ export class ClothesComponent implements OnInit {
   onSubmit(){
     this.clothingService.form.value;
     console.log("form: ", this.clothingService.form.value);
-    if(this.clothingService.form.value.ID){
+    if(!this.clothingService.form.value.ID){
       this.insertClothing(this.clothingService.form);
     }
     else{
-      this.updateRecord(this.clothingService.form);
+      this.updateClothing(this.clothingService.form);
     }
     this.clothingService.form.reset();
     this.clothingService.initializeFormGroup();
@@ -86,7 +84,7 @@ export class ClothesComponent implements OnInit {
     });
   }
 
-  updateRecord(form : any){
+  updateClothing(form : any){
     console.log("form.value: ", form.value);
     this.clothingService.putClothing(form.value, this.fileToUpload).subscribe(res =>{
       this.toastr.info("updated successfully", 'EMP. Register');

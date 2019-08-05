@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HomeService } from '../../shared/home.service';
 
 @Component({
   selector: 'app-records',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecordsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private homeService: HomeService) { }
 
   ngOnInit() {
   }
