@@ -17,41 +17,40 @@ using WebApplication1_delete.Models;
 namespace WebApplication1_delete.Controllers
 {
     [Route("api/[controller]")]
-    [Produces("application/json")]
     [ApiController]
-    public class ClothingController : ControllerBase
+    public class FlagController : ControllerBase
     {
-        private readonly ClothingContext _context;
+        private readonly FlagContext _context;
         private readonly IHostingEnvironment _hostEnvironment;
 
-        public ClothingController(ClothingContext context, IHostingEnvironment hostingEnvironment)
+        public FlagController(FlagContext context, IHostingEnvironment hostEnvironment)
         {
             _context = context;
-            _hostEnvironment = hostingEnvironment;
+            _hostEnvironment = hostEnvironment;
         }
 
-        // GET: api/Clothing
+        // GET: api/Flag
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Clothing>>> GetClothing()
+        public async Task<ActionResult<IEnumerable<Flag>>> GetFlag()
         {
-            return await _context.Clothings.ToListAsync();
+            return await _context.Flags.ToListAsync();
         }
 
-        // GET: api/Clothing/5
+        // GET: api/Flag/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Clothing>> GetClothing(int id)
+        public async Task<ActionResult<Flag>> GetFlag(int id)
         {
-            var clothing = await _context.Clothings.FindAsync(id);
+            var flag = await _context.Flags.FindAsync(id);
 
-            if (clothing == null)
+            if (flag == null)
             {
                 return NotFound();
             }
 
-            return clothing;
+            return flag;
         }
 
-        // PUT: api/Clothing/5
+        // PUT: api/Flag/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutClothing([FromRoute] int id)
         {
@@ -59,14 +58,13 @@ namespace WebApplication1_delete.Controllers
             Debug.WriteLine("Before file request");
             //instead of passing "[FromBody] Record record" as an argument we create a new record because
             //the view model and the database model does not match because of the file
-            Clothing clothing = new Clothing();
-            clothing.Size = Request.Form["Size"];
-            clothing.Description = Request.Form["Description"];
-            clothing.ImagePath = Request.Form["ImagePath"];
-            clothing.Category = Request.Form["Category"];
-            clothing.Title = Request.Form["Title"];
-            clothing.Price = Request.Form["Price"];
-            clothing.ID = id;
+            Flag flag = new Flag();
+            flag.Description = Request.Form["Description"];
+            flag.ImagePath = Request.Form["ImagePath"];
+            flag.Category = Request.Form["Category"];
+            flag.Title = Request.Form["Title"];
+            flag.Price = Request.Form["Price"];
+            flag.ID = id;
 
             Debug.WriteLine("Pass file request");
             try
@@ -81,7 +79,7 @@ namespace WebApplication1_delete.Controllers
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                     var fullPath = Path.Combine(pathToSave, fileName);
 
-                    clothing.ImagePath = fileName;
+                    flag.ImagePath = fileName;
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
@@ -112,7 +110,7 @@ namespace WebApplication1_delete.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(clothing).State = EntityState.Modified;
+            _context.Entry(flag).State = EntityState.Modified;
 
             try
             {
@@ -121,7 +119,7 @@ namespace WebApplication1_delete.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClothingExists(id))
+                if (!FlagExists(id))
                 {
                     return NotFound();
                 }
@@ -135,19 +133,17 @@ namespace WebApplication1_delete.Controllers
             return NoContent();
         }
 
-        // POST: api/Clothing
-        [HttpPost, DisableRequestSizeLimit]
-        //public async Task<ActionResult<Clothing>> PostClothing(Clothing clothing)
-        public async Task<IActionResult> PostClothing()
+        // POST: api/Flag
+        [HttpPost]
+        public async Task<IActionResult> PostFlag()
         {
             Debug.Write("trying to Request");
-            Clothing clothing = new Clothing();
-            clothing.Title = Request.Form["Title"];
-            clothing.Size = Request.Form["Size"];
-            clothing.Price = Request.Form["Price"];
-            clothing.Description = Request.Form["Description"];
-            clothing.ImagePath = Request.Form["ImagePath"];
-            clothing.Category = Request.Form["Category"]; ;
+            Flag flag = new Flag();
+            flag.Title = Request.Form["Title"];
+            flag.Price = Request.Form["Price"];
+            flag.Description = Request.Form["Description"];
+            flag.ImagePath = Request.Form["ImagePath"];
+            flag.Category = Request.Form["Category"]; ;
 
             //Create custom filename
             IFormFile file = Request.Form.Files[0];
@@ -163,14 +159,14 @@ namespace WebApplication1_delete.Controllers
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                     var fullPath = Path.Combine(pathToSave, fileName);
 
-                    clothing.ImagePath = fileName;
+                    flag.ImagePath = fileName;
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         await file.CopyToAsync(stream);
                     }
 
-                    //Image_resize(fullPath, pathToSave + fileName, 40);
+                    Image_resize(fullPath, pathToSave + fileName, 40);
                 }
                 else
                 {
@@ -183,32 +179,32 @@ namespace WebApplication1_delete.Controllers
                 return StatusCode(500, "Internal server error");
             }
 
-            _context.Clothings.Add(clothing);
+            _context.Flags.Add(flag);
             await _context.SaveChangesAsync();
 
-            Console.WriteLine("clothing.ClothingID: " + clothing.ID);
-            return CreatedAtAction("GetClothing", new { id = clothing.ID }, clothing);
+            Console.WriteLine("clothing.ClothingID: " + flag.ID);
+            return CreatedAtAction("GetFlag", new { id = flag.ID }, flag);
         }
 
-        // DELETE: api/Clothing/5
+        // DELETE: api/Flag/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Clothing>> DeleteClothing(int id)
+        public async Task<ActionResult<Flag>> DeleteFlag(int id)
         {
-            var clothing = await _context.Clothings.FindAsync(id);
-            if (clothing == null)
+            var flag = await _context.Flags.FindAsync(id);
+            if (flag == null)
             {
                 return NotFound();
             }
 
-            _context.Clothings.Remove(clothing);
+            _context.Flags.Remove(flag);
             await _context.SaveChangesAsync();
 
-            return clothing;
+            return flag;
         }
 
-        private bool ClothingExists(int id)
+        private bool FlagExists(int id)
         {
-            return _context.Clothings.Any(e => e.ID == id);
+            return _context.Flags.Any(e => e.ID == id);
         }
 
         private void Image_resize(string input_Image_Path, string output_Image_Path, int new_Width)

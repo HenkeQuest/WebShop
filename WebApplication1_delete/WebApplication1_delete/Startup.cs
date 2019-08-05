@@ -48,6 +48,9 @@ namespace WebApplication1_delete
             services.AddDbContext<ClothingContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
 
+            services.AddDbContext<FlagContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+
 
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()

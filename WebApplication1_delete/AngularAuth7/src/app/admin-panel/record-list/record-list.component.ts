@@ -14,7 +14,9 @@ import { startWith, switchMap, map, catchError } from 'rxjs/operators';
 import { Category } from 'src/app/shared/category.model';
 import { CategoryPanelComponent } from '../category-panel/category-panel.component';
 import { ClothingService } from 'src/app/shared/clothing.service';
-import { ClothesComponent } from '../clothes/clothes.component';
+import { ClothingComponent } from '../clothing/clothing.component';
+import { FlagService } from 'src/app/shared/flag.service';
+import { FlagComponent } from '../flag/flag.component';
 
 
 @Component({
@@ -35,6 +37,7 @@ export class RecordListComponent implements OnInit {
   constructor(public sanitizer: DomSanitizer, 
     private router: Router, 
     private recordService : RecordService,
+    private flagService : FlagService,
     private toastr : ToastrService, 
     private user : UserService, 
     private dialog : MatDialog, 
@@ -52,29 +55,38 @@ export class RecordListComponent implements OnInit {
   refreshMatTable(){
     this.recordService.refreshList().subscribe(res =>{
 
-      let array = Array();
-      this.clothingService.getClothing().then(res => {
-        
-        res.forEach(item =>{
-          array.push(item);
-        })
+      this.clothingService.getClothing().then(clothings => {
+        let array = Array();
+        this.flagService.getFlag().then(flags => {
+          
+          clothings.forEach(item =>{
+            array.push(item);
+          })
 
-        this.recordService.list.forEach(item => {
-          array.push(item);
-        })
+          flags.forEach(item =>{
+            array.push(item);
+          })
+  
+          this.recordService.list.forEach(item => {
+            array.push(item);
+          })
+  
+          this.listData.data = array;
 
-        this.listData.data = array;
+          console.log("record list updated: ", res);
+      
+          this.listData.sort = this.sort;
+          this.listData.paginator = this.paginator;
+          this.listData.filterPredicate = (data, filter) => {
+            return this.displayedColumns.some(ele => {
+              console.log("ele: ", ele);
+              console.log("data: ", data);
+              console.log("data[ele]: ", data[ele]);
+              return ele != 'actions' && data[ele].toString().toLowerCase().indexOf(filter) != -1;
+            });
+          };
+        })
       })
-      
-      console.log("record list updated: ", res);
-      
-      this.listData.sort = this.sort;
-      this.listData.paginator = this.paginator;
-      this.listData.filterPredicate = (data, filter) => {
-        return this.displayedColumns.some(ele => {
-          return ele != 'actions' && data[ele].toLowerCase().indexOf(filter) != -1;
-        });
-      };
     });
 
   }
@@ -101,21 +113,40 @@ export class RecordListComponent implements OnInit {
   }
 
   populateClothingForm(rec : any){
-    console.log("this.clothingService.form.value: ", this.clothingService.form.value);
-    console.log("rec: ", rec);
     this.clothingService.populateForm(rec);
-    //this.clothingService.form.value.ImagePath = rec.ImagePath;
     this.clothingService.imageUrl = "http://localhost:62921/Images/40/"+rec.ImagePath; 
-    
   }
 
-  onDelete(id : number){
+  populateFlagForm(rec : any){
+    this.flagService.populateForm(rec);
+    this.flagService.imageUrl = "http://localhost:62921/Images/40/"+rec.ImagePath; 
+  }
+
+  onDelete(row : any){
+    console.log("row: ", row);
     if(confirm('Are you sure to delete this record?')){
-      this.recordService.deleteRecord(id).subscribe(res=>{
-        this.toastr.warning("Deleted successfully", 'EMP. Register');
-        this.recordService.refreshList();
-        this.refreshMatTable();
-      })
+      if(row.Category  == "Record"){
+        this.recordService.deleteRecord(row.ID).subscribe(res=>{
+          this.toastr.warning("Deleted successfully", 'EMP. Register');
+          this.recordService.refreshList();
+          this.refreshMatTable();
+        })
+      }
+      else if(row.Category  == "Clothing"){
+        this.clothingService.deleteClothing(row.ID).subscribe(res=>{
+          this.toastr.warning("Deleted successfully", 'EMP. Register');
+          // this.clothingService.refreshList();
+          this.refreshMatTable();
+        })
+      }
+      else if(row.Category  == "Flag"){
+        this.flagService.deleteFlag(row.ID).subscribe(res=>{
+          this.toastr.warning("Deleted successfully", 'EMP. Register');
+          // this.clothingService.refreshList();
+          this.refreshMatTable();
+        })
+      }
+      
     }
   }
 
@@ -133,9 +164,10 @@ export class RecordListComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
-    this.router.navigateByUrl('/record');
+    this.router.navigateByUrl('adminpanel/record');
     this.dialog.open(CategoryPanelComponent, dialogConfig).afterClosed().subscribe(result =>{
       this.refreshMatTable();
+      this.router.navigateByUrl('/adminpanel');
     });
   }
 
@@ -153,14 +185,24 @@ export class RecordListComponent implements OnInit {
       this.populateRecordForm(row);
       this.dialog.open(RecordComponent, dialogConfig).afterClosed().subscribe(result =>{
         this.refreshMatTable();
+        this.router.navigateByUrl('/adminpanel');
       });
     }
     else if(row.Category == "Clothing"){
       this.populateClothingForm(row);
-      this.dialog.open(ClothesComponent, dialogConfig).afterClosed().subscribe(result =>{
+      this.dialog.open(ClothingComponent, dialogConfig).afterClosed().subscribe(result =>{
         this.refreshMatTable();
+        this.router.navigateByUrl('/adminpanel');
       });
     }
+    else if(row.Category == "Flag"){
+      this.populateFlagForm(row);
+      this.dialog.open(FlagComponent, dialogConfig).afterClosed().subscribe(result =>{
+        this.refreshMatTable();
+        this.router.navigateByUrl('/adminpanel');
+      });
+    }
+    
 
     
   }

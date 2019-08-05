@@ -97,10 +97,6 @@ namespace WebApplication1_delete.Controllers
             record.Description = Request.Form["Description"];
             record.ID = id;
 
-
-
-
-
             Debug.WriteLine("Pass file request" );
             try
             {
