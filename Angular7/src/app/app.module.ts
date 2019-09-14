@@ -40,6 +40,8 @@ import { FlagsComponent } from './home/flags/flags.component';
 import { ClothingsComponent } from './home/clothings/clothings.component';
 import { ClothingDetailsComponent } from './home/clothings/clothing-details/clothing-details.component';
 import { FlagDetailsComponent } from './home/flags/flag-details/flag-details.component';
+import { RecordsFilterPipe } from './records-filter.pipe';
+import { OrderModule } from 'ngx-order-pipe';
 
 
 
@@ -63,7 +65,8 @@ import { FlagDetailsComponent } from './home/flags/flag-details/flag-details.com
     FlagsComponent,
     ClothingsComponent,
     ClothingDetailsComponent,
-    FlagDetailsComponent
+    FlagDetailsComponent,
+    RecordsFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -80,6 +83,7 @@ import { FlagDetailsComponent } from './home/flags/flag-details/flag-details.com
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireAuthModule,
+    OrderModule
     
   ],
   exports: [
