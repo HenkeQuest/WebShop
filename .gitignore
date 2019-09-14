@@ -4,9 +4,9 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 
-WebApplication1_delete/WebApplication1_delete/Images/
-WebApplication1_delete/WebApplication1_delete/Migrations/
-WebApplication1_delete/WebApplication1_delete/wwwroot/Images
+WebShop/WebApplication1_delete/Images/
+WebShop/WebApplication1_delete/Migrations/
+WebShop/WebApplication1_delete/wwwroot/Images
 
 
 # User-specific files
