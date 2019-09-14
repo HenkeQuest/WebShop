@@ -1,4 +1,4 @@
-# AngularAuth7
+# WebShop
 
 <img src="webShop.png" width="350">
 
