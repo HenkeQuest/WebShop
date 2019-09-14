@@ -10,6 +10,8 @@ export class RecordsComponent implements OnInit {
 
   constructor(private homeService: HomeService) { }
 
+  order: string = 'Band';
+
   ngOnInit() {
   }
 
