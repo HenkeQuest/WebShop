@@ -3,7 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-
 WebAPI/Images/
 WebAPI/Migrations/
 WebAPI/wwwroot/Images
