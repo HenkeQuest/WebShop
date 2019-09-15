@@ -4,9 +4,9 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 
-WebShop/WebAPI/Images/
-WebShop/WebAPI/Migrations/
-WebShop/WebAPI/wwwroot/Images
+WebAPI/Images/
+WebAPI/Migrations/
+WebAPI/wwwroot/Images
 Angular7/src/environments/environment.ts
 
 # User-specific files
