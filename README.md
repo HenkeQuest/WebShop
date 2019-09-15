@@ -1,6 +1,8 @@
 # WebShop
 Work in progress...
 
+Work in progress...
+
 <img src="webShop.png" width="350">
 
 ## Development server
