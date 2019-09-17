@@ -1,0 +1,15 @@
+<p>
+  User profile
+</p>
+User name: {{userDetails.UserName}}
+<br>
+Email: {{userDetails.Email}}
+<br>
+
+<div *ngFor="let record of cartService.cartList.record">
+  Cart:  {{record.Title}}
+</div>
+
+<button mat-raised-button (click)="onCreate()">
+    <mat-icon>add</mat-icon>Create
+  </button>

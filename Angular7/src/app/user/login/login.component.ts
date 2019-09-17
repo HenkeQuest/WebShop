@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
     UserName: '',
     Password: ''
   }
-  constructor(private service:UserService, private router: Router, private toastr: ToastrService) { }
+  constructor(private userService:UserService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     if(localStorage.getItem('token') != null){
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    this.service.login(form.value).subscribe(
+    this.userService.login(form.value).subscribe(
       (res: any) => {
         localStorage.setItem('token', res.token);
         this.router.navigateByUrl('/home');

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Record } from './record.model';
 import { HttpClient} from "@angular/common/http";
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from '@angular/fire/firestore'
+// import {
+//   AngularFirestore,
+//   AngularFirestoreCollection,
+//   AngularFirestoreDocument
+// } from '@angular/fire/firestore'
 import { map } from 'rxjs/operators';
 import { from, Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material';
@@ -22,7 +22,7 @@ export class RecordService {
   readonly rootURL = "http://localhost:62921/api";
   imageUrl: string = "http://localhost:62921/Images/40/default-image.png";
 
-  recordsCollection: AngularFirestoreCollection<Record>;
+  //recordsCollection: AngularFirestoreCollection<Record>;
 
   form: FormGroup = new FormGroup({
     ID: new FormControl(null),
@@ -38,10 +38,10 @@ export class RecordService {
     Category: new FormControl("Record")
   })
 
-  constructor(private http : HttpClient, private afs: AngularFirestore) { 
-    this.recordsCollection = this.afs.collection('RecordDB', ref =>
-      ref.orderBy('Band','desc')
-    );
+  constructor(private http : HttpClient) { 
+    // this.recordsCollection = this.afs.collection('RecordDB', ref =>
+    //   ref.orderBy('Band','desc')
+    // );
 
    this.initializeFormGroup();
    console.log("this.list: ", this.list);
@@ -65,17 +65,17 @@ export class RecordService {
     });
   }
 
-  getRecordFromFB(){
-    return this.recordsCollection.snapshotChanges()
-    .pipe( map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data() as Record
-          const id = a.payload.doc.id
-          return {id, ...data}
-        })
-      })
-    )
-  }
+  // getRecordFromFB(){
+  //   return this.recordsCollection.snapshotChanges()
+  //   .pipe( map(actions => {
+  //       return actions.map(a => {
+  //         const data = a.payload.doc.data() as Record
+  //         const id = a.payload.doc.id
+  //         return {id, ...data}
+  //       })
+  //     })
+  //   )
+  // }
 
   postRecord(modelFormData : Record,fileToUpload: File ){
     const formData: FormData = new FormData;

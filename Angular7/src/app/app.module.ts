@@ -8,11 +8,11 @@ import { ToastrModule } from 'ngx-toastr';
 
 
 import {AngularFireModule} from '@angular/fire'
-import {AngularFirestoreModule} from '@angular/fire/firestore'
-import {AngularFireStorageModule} from '@angular/fire/storage'
-import {AngularFireAuthModule} from '@angular/fire/auth'
+//import {AngularFirestoreModule} from '@angular/fire/firestore'
+//import {AngularFireStorageModule} from '@angular/fire/storage'
+//import {AngularFireAuthModule} from '@angular/fire/auth'
 
-import {environment} from '../environments/environment'
+//import {environment} from '../environments/environment'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,9 +26,9 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { RecordComponent } from './admin-panel/record/record.component';
 import { RecordListComponent } from './admin-panel/record-list/record-list.component';
-import { RecordsComponent } from './home/records/records.component';
+import { RecordsComponent } from './records/records.component';
 import { SafePipe } from './pipe/pipe.component';
-import { RecordDetailsComponent } from './home/records/record-details/record-details.component';
+import { RecordDetailsComponent } from './records/record-details/record-details.component';
 import { RecordService } from './shared/record.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CategoryService } from './shared/category.service';
@@ -36,12 +36,13 @@ import { CategoryPanelComponent } from './admin-panel/category-panel/category-pa
 import { ClothingComponent } from './admin-panel/clothing/clothing.component';
 import { FlagComponent } from './admin-panel/flag/flag.component';
 import { HomeService } from './shared/home.service';
-import { FlagsComponent } from './home/flags/flags.component';
-import { ClothingsComponent } from './home/clothings/clothings.component';
-import { ClothingDetailsComponent } from './home/clothings/clothing-details/clothing-details.component';
-import { FlagDetailsComponent } from './home/flags/flag-details/flag-details.component';
+import { FlagsComponent } from './flags/flags.component';
+import { ClothingsComponent } from './clothings/clothings.component';
+import { ClothingDetailsComponent } from './clothings/clothing-details/clothing-details.component';
+import { FlagDetailsComponent } from './flags/flag-details/flag-details.component';
 import { RecordsFilterPipe } from './records-filter.pipe';
 import { OrderModule } from 'ngx-order-pipe';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
@@ -66,7 +67,8 @@ import { OrderModule } from 'ngx-order-pipe';
     ClothingsComponent,
     ClothingDetailsComponent,
     FlagDetailsComponent,
-    RecordsFilterPipe
+    RecordsFilterPipe,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -79,10 +81,10 @@ import { OrderModule } from 'ngx-order-pipe';
       progressBar:true
     }),
     FormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-    AngularFireAuthModule,
+    //AngularFireModule.initializeApp(environment.firebase),
+    //AngularFirestoreModule,
+    //AngularFireStorageModule,
+    //AngularFireAuthModule,
     OrderModule
     
   ],

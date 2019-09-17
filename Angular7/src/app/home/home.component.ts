@@ -32,54 +32,37 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getUserProfile().subscribe(
-      res => {
-        console.log("res: ", res);
-        this.userDetails = res;
-      },
-      err =>{
-        console.log(err);
-      }
-    );
-
-    this.recordService.getRecords().subscribe(res => {
-      this.homeService.list = res;
-    })
-
-    this.homeService.populate(0);
-  }
-
-  populate(id){
-    this.recordService.getRecords().subscribe(res => {
-      this.list = res;
-      this.details(id);
-    })
     
+
+    
+
+    //this.homeService.populate(0);
   }
 
-  populateFlags(){
-    this.flagService.getFlag().then(res => {
-      this.list = res;
-    })
-  }
+  // populate(){
+  //   this.recordService.getRecords().subscribe(res => {
+  //     this.list = res;
+  //   })
+    
+  // }
 
-  populateRecords(){
-    this.recordService.getRecords().subscribe(res => {
-      this.list = res;
-    })
-  }
+  // populateFlags(){
+  //   this.flagService.getFlag().then(res => {
+  //     this.list = res;
+  //   })
+  // }
 
-  populateClothing(){
-    this.clothingService.getClothing().then(res => {
-      this.list = res;
-    })
-  }
+  // populateRecords(){
+  //   this.recordService.getRecords().subscribe(res => {
+  //     this.list = res;
+  //   })
+  // }
 
-
-  onLogout(){
-    localStorage.removeItem('token');
-    this.router.navigate(['/user/login'])
-  }
+  // populateClothing(){
+  //   this.clothingService.getClothing().then(res => {
+  //     this.list = res;
+  //   })
+  // }
 
   details(id: number){
    // var myurl = `record/${id}`;

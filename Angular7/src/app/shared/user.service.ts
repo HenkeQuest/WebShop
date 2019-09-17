@@ -9,6 +9,7 @@ export class UserService {
 
   constructor(private fb:FormBuilder, private http:HttpClient) { }
   readonly BaseURI = 'http://localhost:62921/api';
+  userStatus = "Log in";
 
   formModel = this.fb.group({
     UserName :['',Validators.required],
@@ -39,11 +40,11 @@ export class UserService {
       FullName: this.formModel.value.FullName,
       Password: this.formModel.value.Passwords.Password
     };
-    console.log("body: ", body);
     return this.http.post(this.BaseURI+'/ApplicationUser/Register',body)
   }
 
   login(formData){
+    this.userStatus = "Log out";
     console.log("formData: ", formData);
     return this.http.post(this.BaseURI + '/ApplicationUser/Login', formData)
   }

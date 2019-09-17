@@ -1,39 +1,6 @@
-<nav class="navbar navbar-dark bg-dark">
-  <a href="" class="navbar-brand text-white">Home</a>
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/adminpanel">Admin Panel</a>
-    </li>
-  </ul>
-  <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
-</nav>
 
-<!-- <div class="card m-5" style="width:18rem" *ngIf="userDetails">
-    <ul class="list-group">
-      <li class="list-group-item"><strong>Username : </strong>{{userDetails.UserName}}</li>
-      <li class="list-group-item"><strong>FullName : </strong>{{userDetails.FullName}}</li>
-      <li class="list-group-item"><strong>Email : </strong>{{userDetails.Email}}</li>
-    </ul>
+
+  <!-- <div *ngFor="let rec of recordService.list">
   </div> -->
-<div class="d-flex" id="wrapper">
-  <div class="bg-light border-right" id="sidebar-wrapper">
-    <div class="sidebar-heading"></div>
-    <div class="list-group list-group-flush">
-      <div routerLink="./records" class="list-group-item list-group-item-action bg-light">Records</div>
-      <div routerLink="./flags" class="list-group-item list-group-item-action bg-light">Posters</div>
-      <div routerLink="./clothings"  class="list-group-item list-group-item-action bg-light">Clothing</div>
-      <div class="list-group-item list-group-item-action bg-light">DVD/VHS</div>
-      <div class="list-group-item list-group-item-action bg-light">Literature</div>
-      <div class="list-group-item list-group-item-action bg-light">Other</div>
-    </div>
-  </div>
 
-
-
-      <router-outlet></router-outlet>
-</div>
-
-  <div *ngFor="let rec of recordService.list">
-  </div>
-
-
+  Home startsida

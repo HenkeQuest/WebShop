@@ -106,4 +106,8 @@ export class RecordComponent implements OnInit {
     })
   }
 
+  onClose(){
+    this.dialogRef.close();
+  }
+
 }
