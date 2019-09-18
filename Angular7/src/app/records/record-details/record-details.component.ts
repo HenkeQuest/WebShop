@@ -12,16 +12,27 @@ import { HomeService } from 'src/app/shared/home.service';
 })
 export class RecordDetailsComponent implements OnInit {
 
-  record: Record;
+  record: Record = {
+    "ID" : 0,
+    "Band" : "",
+    "Album" : "",
+    "Year" : "",
+    "Genre" : "",
+    "Image" :  null,
+    "ImagePath" : "",
+    "Title" : "",
+    "Price" : "",
+    "Category" : ""
+  };
   constructor(private route: ActivatedRoute, private recordService : RecordService, private homeService : HomeService ) { }
 
   ngOnInit() {
     
-    this.route.params.subscribe(params => {
-      this.homeService.list.forEach((rec: Record) => {
+    this.route.params.subscribe( params => {
+       this.homeService.list.forEach((rec: Record) => {
         console.log("rec: " + rec.ID);
         if (rec.ID == params.id) {
-          this.record = rec;
+           this.record = rec;
         }
       });
     });

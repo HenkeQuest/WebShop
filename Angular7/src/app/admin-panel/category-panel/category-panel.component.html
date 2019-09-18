@@ -7,15 +7,15 @@
     <mat-select  placeholder="Categories">
       <mat-option>None</mat-option>
       <ng-container *ngFor="let cat of categories">
-        <mat-option value="{{cat.CategoryName}}" routerLink='adminpanel/{{cat.CategoryRoute}}'>{{cat.CategoryName}}</mat-option>
+        <mat-option value="{{cat.CategoryName}}" [routerLink]="[{ outlets: { category: [cat.CategoryRoute] } }]">{{cat.CategoryName}}</mat-option>
       </ng-container>
     </mat-select>
   </mat-form-field>
 
-
+  <!-- [{ outlet: { category: ['adminpanel/{{cat.CategoryRoute}}'] } }] -->
 <div class="row">
-  <div class="col-md-10 offset-md-1">
-    <router-outlet></router-outlet>
+  <div  class="col-md-10 offset-md-1">
+    <router-outlet name="category" (deactivate)='onDeactivate($event)'></router-outlet>
   </div>
 </div>
 

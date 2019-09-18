@@ -7,7 +7,7 @@ import { HttpClient} from "@angular/common/http";
 //   AngularFirestoreDocument
 // } from '@angular/fire/firestore'
 import { map } from 'rxjs/operators';
-import { from, Observable } from 'rxjs';
+import { from, Observable, Subject } from 'rxjs';
 import { MatTableDataSource } from '@angular/material';
 import { RecordListComponent } from '../admin-panel/record-list/record-list.component';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -18,6 +18,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class RecordService {
 
   formData : Record;
+  activeRoute: Subject<boolean> = new Subject<boolean>();
   list : Record[];
   readonly rootURL = "http://localhost:62921/api";
   imageUrl: string = "http://localhost:62921/Images/40/default-image.png";

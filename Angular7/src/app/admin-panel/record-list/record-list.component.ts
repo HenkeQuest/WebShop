@@ -3,7 +3,7 @@ import { Record } from 'src/app/shared/record.model';
 import { ToastrService } from 'ngx-toastr';
 import { RecordService } from 'src/app/shared/record.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router';
 import { RecordComponent } from '../record/record.component';
 import { UserService } from 'src/app/shared/user.service';
 import { AuthGuard } from 'src/app/auth/auth.guard';
@@ -42,7 +42,8 @@ export class RecordListComponent implements OnInit {
     private user : UserService, 
     private dialog : MatDialog, 
     private cdr: ChangeDetectorRef,
-    private clothingService : ClothingService) {}
+    private clothingService : ClothingService,
+    private activeRoute: ActivatedRoute) {}
 
   ngOnInit() {
     //this.recordService.formData.ImagePath = "default-image.png";
@@ -154,11 +155,21 @@ export class RecordListComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
-    this.router.navigateByUrl('adminpanel/record');
+    //this.router.navigateByUrl('adminpanel/record');
+    this.router.navigate([{ outlets: { category: "record" }}]);
+    console.log('this.activeRoute: ', this.activeRoute);
     this.dialog.open(CategoryPanelComponent, dialogConfig).afterClosed().subscribe(result =>{
-      this.refreshMatTable();
-      this.router.navigateByUrl('/adminpanel');
+      this.recordService.activeRoute.next(false);
+      //this.refreshMatTable();
+      this.router.navigate(['/adminpanel']);
+      //this.router.navigateByUrl("/adminpanel", { skipLocationChange: true });
+      console.log('this.activeRoute: ', this.activeRoute);
+      //this.router.navigate([''], { relativeTo: this.activeRoute });
     });
+  }
+
+  onDeactivate(e){
+    console.log("deactivate: ", e);
   }
 
   onEdit(row: any){

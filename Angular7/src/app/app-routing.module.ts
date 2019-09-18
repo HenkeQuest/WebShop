@@ -29,17 +29,18 @@ const routes: Routes = [
     ]
   },
   { path: "home", component:HomeComponent,canActivate:[AuthGuard]},
-  { path: "profile", component:ProfileComponent,canActivate:[AuthGuard],data : {permittedRoles:['Customer']}},
+  { path: "profile", component:ProfileComponent,data : {permittedRoles:['Customer']}},
   { path: "record/:id", component: RecordDetailsComponent},
+  { path: "record", component:RecordComponent},
   { path: "records", component: RecordsComponent},
   { path: "flags", component: FlagsComponent},
   { path: "flag/:id", component: FlagDetailsComponent},
   { path: "clothings", component: ClothingsComponent},
   { path: "clothing/:id", component: ClothingDetailsComponent},
   { path: "forbidden", component:ForbiddenComponent},
-  { path: "adminpanel/clothing", component:ClothingComponent},
-  { path: "adminpanel/record", component:RecordComponent},
-  { path: "adminpanel/flag", component: FlagComponent},
+  { path: "clothing", component:ClothingComponent, outlet:"category"},
+  { path: "record", component:RecordComponent, outlet:"category"},
+  { path: "flag", component: FlagComponent, outlet:"category"},
   { path: "adminpanel", component:AdminPanelComponent,canActivate:[AuthGuard],data : {permittedRoles:['Admin']}}
   // {path:"adminpanel", component:AdminPanelComponent,canActivate:[AuthGuard],data : {permittedRoles:['Admin']},
   //   children: [
