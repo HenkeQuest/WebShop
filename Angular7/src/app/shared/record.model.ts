@@ -9,4 +9,5 @@ export class Record {
     Title: string;
     Price: string;
     Category: string;
+    UserName: string;
 }

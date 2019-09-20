@@ -55,9 +55,9 @@ export class RecordListComponent implements OnInit {
 
   refreshMatTable(){
     this.recordService.refreshList().subscribe(res =>{
-      this.clothingService.getClothing().then(clothings => {
+      this.clothingService.getClothings().then(clothings => {
         let array = Array();
-        this.flagService.getFlag().then(flags => {
+        this.flagService.getFlags().then(flags => {
           
           clothings.forEach(item =>{
             array.push(item);
@@ -159,12 +159,9 @@ export class RecordListComponent implements OnInit {
     this.router.navigate([{ outlets: { category: "record" }}]);
     console.log('this.activeRoute: ', this.activeRoute);
     this.dialog.open(CategoryPanelComponent, dialogConfig).afterClosed().subscribe(result =>{
-      this.recordService.activeRoute.next(false);
+      //this.recordService.activeRoute.next(false);
       //this.refreshMatTable();
-      this.router.navigate(['/adminpanel']);
-      //this.router.navigateByUrl("/adminpanel", { skipLocationChange: true });
-      console.log('this.activeRoute: ', this.activeRoute);
-      //this.router.navigate([''], { relativeTo: this.activeRoute });
+      this.router.navigate([{ outlets: { category: null }}] );
     });
   }
 

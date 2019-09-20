@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialogRef } from '@angular/material';
 import { RecordService } from 'src/app/shared/record.service';
+import { UserService } from 'src/app/shared/user.service';
 
 @Component({
   selector: 'app-clothing',
@@ -19,11 +20,12 @@ export class ClothingComponent implements OnInit {
   constructor(private clothingService : ClothingService,
               private recordService : RecordService, 
               private toastr : ToastrService,
-              public dialogRef: MatDialogRef<ClothingComponent>) { 
+              public dialogRef: MatDialogRef<ClothingComponent>,
+              private userService: UserService) { 
   }
 
   ngOnInit() {
-    this.clothingService.getClothing().then( res =>{
+    this.clothingService.getClothings().then( res =>{
       this.clothing = res as Clothing[];
     });
 
@@ -56,6 +58,7 @@ export class ClothingComponent implements OnInit {
 
   onSubmit(){
     this.clothingService.form.value;
+    this.clothingService.form.value.UserName = this.userService.currentUser.UserName;
     console.log("form: ", this.clothingService.form.value);
     if(!this.clothingService.form.value.ID){
       this.insertClothing(this.clothingService.form);

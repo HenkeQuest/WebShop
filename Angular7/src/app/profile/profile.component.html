@@ -1,9 +1,9 @@
 <p>
   User profile
 </p>
-User name: {{userDetails.UserName}}
+User name: {{userService.userDetails.UserName}}
 <br>
-Email: {{userDetails.Email}}
+Email: {{userService.userDetails.Email}}
 <br>
 
 <div *ngFor="let record of cartService.cartList.record">
@@ -13,3 +13,30 @@ Email: {{userDetails.Email}}
 <button mat-raised-button (click)="onCreate()">
     <mat-icon>add</mat-icon>Create
   </button>
+
+
+<div class="album py-5 bg-light">
+  <div class="container">
+    <h2>Your Items</h2>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let item of userService.userItems | orderBy: order : false">
+        <div class="card mb-4 box-shadow">
+          <a class="fancybox" rel="gallery" href="{{item.imagePath}}">
+              <img class="card-img-top" src="http://localhost:62921/Images/40/{{item.ImagePath}}" style="height: 225px; width: 100%; display: block;" alt="{{item.Title}}" class="img img-responsive full-width thumbnail" />
+          </a>
+          <div class="card-body">
+            <p class="card-text">{{item.Title}}</p>
+            <p class="card-text">{{item.Category}}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button"  routerLink='/record/{{item.ID}}' class="btn btn-sm btn-outline-secondary">View</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="userService.removeItem(item)">Remove</button>
+              </div>
+              <small class="text-muted">9 mins</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

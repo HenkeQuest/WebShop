@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace WebApplication1_delete.Models
+namespace WebAPI.Models
 {
     public class CategoryContext : DbContext
     {
@@ -15,5 +15,7 @@ namespace WebApplication1_delete.Models
         }
 
         public DbSet<Category> Categories { get; set; }
+        
+
     }
 }

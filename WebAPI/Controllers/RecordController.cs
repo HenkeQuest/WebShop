@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Drawing;
@@ -16,7 +16,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Hosting;
 
-namespace WebApplication1_delete.Controllers
+namespace WebAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -58,6 +58,14 @@ namespace WebApplication1_delete.Controllers
             return _context.Records;
         }
 
+        // GET: api/Record/username/username
+        [HttpGet("username/{userName}")]
+        public async Task<ActionResult<IEnumerable<Record>>> GetRecordsByUserName(string userName)
+        {
+            Console.WriteLine("_context.Records: " + _context.Records);
+            return await _context.Records.Where(b => b.UserName == userName).ToListAsync();
+        }
+
         // GET: api/Record/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRecord([FromRoute] int id)
@@ -95,6 +103,7 @@ namespace WebApplication1_delete.Controllers
             record.Title = Request.Form["Title"];
             record.Price = Request.Form["Price"];
             record.Description = Request.Form["Description"];
+            record.UserName = Request.Form["UserName"];
             record.ID = id;
 
             Debug.WriteLine("Pass file request" );
@@ -177,7 +186,8 @@ namespace WebApplication1_delete.Controllers
             record.Category = Request.Form["Category"];
             record.Title = Request.Form["Title"];
             record.Price = Request.Form["Price"];
-            record.ImagePath = Request.Form["ImagePath"]; ;
+            record.ImagePath = Request.Form["ImagePath"];
+            record.UserName = Request.Form["UserName"];
 
             Debug.WriteLine("Imageeeeeeeeeeeeeeeeeeeeeeeeeee: " );
             
@@ -227,7 +237,7 @@ namespace WebApplication1_delete.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecord([FromRoute] int id)
         {
-            Console.WriteLine("Delete record");
+            Debug.WriteLine("Delete record");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

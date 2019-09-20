@@ -22,20 +22,18 @@ export class RecordDetailsComponent implements OnInit {
     "ImagePath" : "",
     "Title" : "",
     "Price" : "",
-    "Category" : ""
+    "Category" : "",
+    "UserName": ""
   };
   constructor(private route: ActivatedRoute, private recordService : RecordService, private homeService : HomeService ) { }
 
   ngOnInit() {
-    
     this.route.params.subscribe( params => {
-       this.homeService.list.forEach((rec: Record) => {
-        console.log("rec: " + rec.ID);
-        if (rec.ID == params.id) {
-           this.record = rec;
-        }
+      this.recordService.getRecord(params.id).subscribe((res: Record) => {
+        this.record = res;
       });
     });
+
   }
 
 }

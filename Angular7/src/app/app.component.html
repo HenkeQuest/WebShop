@@ -8,6 +8,7 @@
         <a class="nav-link" routerLink="/adminpanel">Admin Panel</a>
       </li>
     </ul>
+    <p>{{cartService.cartList.record[cartService.cartListSize].Title}}</p>
     <button class="btn btn-danger my-2 my-sm-0" routerLink="/profile">Profile</button>
     <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">{{userService.userStatus}}</button>
   </nav>

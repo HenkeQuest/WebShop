@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ClothingComponent } from 'src/app/admin-panel/clothing/clothing.component';
 import { Clothing } from 'src/app/shared/clothing.model';
 import { ClothingService } from 'src/app/shared/clothing.service';
+import { CartService } from 'src/app/shared/cart.service';
 
 @Component({
   selector: 'app-clothing-details',
@@ -15,12 +16,9 @@ export class ClothingDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private clothingService : ClothingService) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.clothingService.list.forEach((rec: Clothing) => {
-        console.log("rec: " + rec.ID);
-        if (rec.ID == params.id) {
-          this.clothing = rec;
-        }
+    this.route.params.subscribe( params => {
+      this.clothingService.getClothing(params.id).subscribe((res: Clothing) => {
+        this.clothing = res;
       });
     });
   }

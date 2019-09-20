@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1_delete.Models
+namespace WebAPI.Models
 {
     public class AuthenticationContext : IdentityDbContext
     {

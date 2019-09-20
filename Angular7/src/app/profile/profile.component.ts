@@ -7,6 +7,7 @@ import { ClothingService } from '../shared/clothing.service';
 import { Route, Router } from '@angular/router';
 import { CategoryPanelComponent } from '../admin-panel/category-panel/category-panel.component';
 import { MatDialogConfig, MatDialog } from '@angular/material';
+import { Record } from 'src/app/shared/record.model';
 
 @Component({
   selector: 'app-profile',
@@ -15,10 +16,8 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 })
 export class ProfileComponent implements OnInit {
 
-  userDetails : User = {
-    UserName: "",
-    Email: ""
-  };
+
+  userItems: Record[] = [];
 
   constructor(
     private userService: UserService, 
@@ -30,15 +29,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     console.log("this.cartService.cartList: ", this.cartService.cartList);
-    this.userService.getUserProfile().subscribe(
-      (res : User )=> {
-        console.log("res: ", res);
-        this.userDetails = res;
-      },
-      err =>{
-        console.log(err);
-      }
-    );
+    
+    
   }
 
   onCreate(){
@@ -51,8 +43,10 @@ export class ProfileComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
     this.router.navigateByUrl('/record');
+    this.router.navigate([{ outlets: { category: "record" }}] );
     this.dialog.open(CategoryPanelComponent, dialogConfig).afterClosed().subscribe(result =>{
       //this.refreshMatTable();
+      this.router.navigate([{ outlets: { category: null }}] );
       this.router.navigateByUrl('/profile');
     });
   }

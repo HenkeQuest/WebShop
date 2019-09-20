@@ -4,6 +4,7 @@ import { FlagService } from 'src/app/shared/flag.service';
 import { RecordService } from 'src/app/shared/record.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialogRef } from '@angular/material';
+import { UserService } from 'src/app/shared/user.service';
 
 @Component({
   selector: 'app-flag',
@@ -19,11 +20,12 @@ export class FlagComponent implements OnInit {
   constructor(private flagService : FlagService,
               private recordService : RecordService, 
               private toastr : ToastrService,
-              public dialogRef: MatDialogRef<FlagComponent>) { 
+              public dialogRef: MatDialogRef<FlagComponent>,
+              private userService: UserService) { 
   }
 
   ngOnInit() {
-    this.flagService.getFlag().then( res =>{
+    this.flagService.getFlags().then( res =>{
       this.flag = res as Flag[];
     });
 
@@ -57,6 +59,8 @@ export class FlagComponent implements OnInit {
   onSubmit(){
     this.flagService.form.value;
     console.log("form: ", this.flagService.form.value);
+
+    this.flagService.form.value.UserName = this.userService.currentUser.UserName;
     if(!this.flagService.form.value.ID){
       this.insertFlag(this.flagService.form);
     }

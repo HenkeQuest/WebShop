@@ -6,4 +6,5 @@ export class Flag {
     Image: File;
     ImagePath: string;
     Category: string;
+    UserName: string;
 }

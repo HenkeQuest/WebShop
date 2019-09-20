@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 
-namespace WebApplication1_delete.Controllers
+namespace WebAPI.Controllers
 {
     public class HomeController : Controller
     {

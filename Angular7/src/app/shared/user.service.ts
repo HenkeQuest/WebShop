@@ -1,13 +1,27 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { User } from './user.model';
+import { CartService } from './cart.service';
+import { RecordService } from './record.service';
+import { ClothingService } from './clothing.service';
+import { FlagService } from './flag.service';
+import { Record } from 'src/app/shared/record.model';
+import { UserItem } from './user-item.model';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private fb:FormBuilder, private http:HttpClient) { }
+  currentUser: User = {"UserName" : "", "Email" : ""};
+
+  userDetails: User = {"UserName" : "", "Email" : ""};
+  userItem: UserItem = new UserItem();
+  userItems: Array<UserItem> = [];
+
   readonly BaseURI = 'http://localhost:62921/api';
   userStatus = "Log in";
 
@@ -20,6 +34,42 @@ export class UserService {
       ConfirmPassword :['',Validators.required]
     },{validator : this.comparePasswords}),
   });
+
+  constructor(
+    private fb:FormBuilder, 
+    private http:HttpClient,
+    private flagService: FlagService, 
+    private recordService: RecordService,
+    private clothingService: ClothingService) { 
+      this.getUserProfile().subscribe((resUser : User )=> {
+        this.currentUser = resUser;
+        this.userDetails = resUser;
+
+        this.recordService.getRecordByUserName(this.userDetails.UserName).subscribe(res =>{
+          res.forEach(item=>{
+            this.addUserItem(item);
+          })
+        })
+
+        this.flagService.getFlagByUserName(this.userDetails.UserName).subscribe((res) =>{
+          res.forEach(item=>{
+            this.addUserItem(item);
+          })
+        })
+
+        this.clothingService.getClothingByUserName(this.userDetails.UserName).subscribe((res) =>{
+          res.forEach(item=>{
+            this.addUserItem(item);
+          })
+        })
+      },
+      err =>{
+        console.log(err);
+    });
+  }
+  
+
+  
 
   comparePasswords(fb:FormGroup){
     let confirmPswrdCtrl = fb.get('ConfirmPassword');
@@ -66,5 +116,48 @@ export class UserService {
       }
     });
     return isMatch;
+  }
+
+  removeItem(item){
+    if(confirm('Are you sure to delete this record?')){
+      if("Record" == item.Category){
+        console.log("Remove item: ", item.ID);
+      console.log("Remove item: ", item.Category);
+        this.recordService.deleteRecord(item.ID).subscribe(res=>{
+          this.recordService.refreshList();
+          console.log("record deleted");
+        });
+        //this.userItems
+      }
+      else if("Clothing"  == item.Category){
+        this.clothingService.deleteClothing(item.ID).subscribe(res=>{
+          this.clothingService.refreshList();
+          console.log("record deleted");
+        });
+      }
+      else if("Flag"  == item.Category){
+        this.flagService.deleteFlag(item.ID).subscribe(res=>{
+          this.flagService.refreshList();
+          console.log("record deleted");
+        });
+      }
+
+      let index = this.userItems.findIndex(e => e.Title === item.Title);
+      console.log("index: ", index);
+      if (index > -1) {
+
+        this.userItems.splice(index,1);
+      }
+    }
+
+  }
+
+  addUserItem(item){
+    this.userItem = new UserItem();
+    this.userItem.Title = item.Title;
+    this.userItem.ImagePath= item.ImagePath;
+    this.userItem.Category= item.Category;
+    this.userItem.ID= item.ID;
+    this.userItems.push(this.userItem);
   }
 }

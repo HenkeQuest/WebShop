@@ -18,9 +18,9 @@ export class RecordsComponent implements OnInit {
   ngOnInit() {
     console.log('this.activeRoute: ', this.activeRoute);
     //this.recordService.refreshList();
-    // this.recordService.getRecords().subscribe(res => {
-    //   this.recordService.list = res;
-    // })
+    this.recordService.getRecords().subscribe(res => {
+      this.recordService.list = res;
+    })
   }
 
 }

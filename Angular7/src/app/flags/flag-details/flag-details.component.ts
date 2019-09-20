@@ -14,12 +14,9 @@ export class FlagDetailsComponent implements OnInit {
   constructor(private route : ActivatedRoute, private flagService: FlagService) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.flagService.list.forEach((rec: Flag) => {
-        console.log("rec: " + rec.ID);
-        if (rec.ID == params.id) {
-          this.flag = rec;
-        }
+    this.route.params.subscribe( params => {
+      this.flagService.getFlag(params.id).subscribe((res: Flag) => {
+        this.flag = res;
       });
     });
   }

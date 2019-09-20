@@ -6,6 +6,7 @@ import { Record } from 'src/app/shared/record.model';
 import { MatDialogRef} from '@angular/material';
 import { CategoryService } from 'src/app/shared/category.service';
 import { Category } from 'src/app/shared/category.model';
+import { UserService } from 'src/app/shared/user.service';
 
 @Component({
   selector: 'app-record',
@@ -22,8 +23,11 @@ export class RecordComponent implements OnInit {
   record : Record;
   categories ;  
 
-  constructor(private recordService : RecordService, private categoryService : CategoryService,
-    private toastr : ToastrService, public dialogRef: MatDialogRef<RecordComponent>) { }
+  constructor(private recordService : RecordService, 
+    private categoryService : CategoryService,
+    private toastr : ToastrService, 
+    public dialogRef: MatDialogRef<RecordComponent>,
+    private userService: UserService) { }
 
   ngOnInit() {
     console.log("ngOnInit");
@@ -40,7 +44,7 @@ export class RecordComponent implements OnInit {
       form.resetForm();
     this.recordService.formData = {
       ID : 0,
-      Band : "tytyty",
+      Band : "",
       Album : "",
       Year : "",
       Genre : "",
@@ -48,7 +52,8 @@ export class RecordComponent implements OnInit {
       ImagePath : "",
       Title: "",
       Price: "",
-      Category: ""
+      Category: "",
+      UserName: ""
     }
     this.recordService.formData.ImagePath = "default-image.png";
     this.imageUrl = this.imageRootPath + "default-image.png";
@@ -56,6 +61,7 @@ export class RecordComponent implements OnInit {
 
   onSubmit(){
     this.recordService.form.value;
+    this.recordService.form.value.UserName = this.userService.currentUser.UserName;
     console.log("form: ", this.recordService.form.value);
     if(!this.recordService.form.value.ID){
       this.insertRecord(this.recordService.form);

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 
-namespace WebApplication1_delete.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,8 +24,10 @@ namespace WebApplication1_delete.Controllers
         [Authorize]
         // GET : /api/UserProfile
         public async Task<Object> GetUserProfile() {
+            
             string userId = User.Claims.First(c => c.Type == "UserID").Value;
             var user = await _userManager.FindByIdAsync(userId);
+            Debug.WriteLine("user: " + user);
             return new
             {
                 user.FullName,

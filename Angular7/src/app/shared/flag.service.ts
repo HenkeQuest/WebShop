@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Flag } from './flag.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class FlagService {
     this.formData.Description = "";
     this.formData.Category = "flag";
 
-    this.getFlag().then(res =>{
+    this.getFlags().then(res =>{
       this.list = res as Flag[];
     })
   }
@@ -53,8 +54,12 @@ export class FlagService {
   }
 
 
-  getFlag(){
+  getFlags(){
     return this.http.get<Flag[]>(this.rootURL + "/flag").toPromise();
+  }
+
+  getFlag(id:number): Observable<Flag>{
+    return this.http.get<Flag>(this.rootURL+"/flag/"+id);
   }
 
   postFlag(modelFormData : Flag, fileToUpload: File ){
@@ -67,6 +72,8 @@ export class FlagService {
     formData.append("Image", fileToUpload, fileToUpload.name);
     formData.append("ImagePath", modelFormData.ImagePath);
     formData.append("Category", modelFormData.Category);
+    formData.append("UserName", modelFormData.UserName);
+    
 
     
 
@@ -85,6 +92,7 @@ export class FlagService {
     }
     formData.append("ImagePath", modelFormData.ImagePath);
     formData.append("Category", modelFormData.Category);
+    formData.append("UserName", modelFormData.UserName);
 
     console.log("modelFormData: ", modelFormData);
 
@@ -96,6 +104,17 @@ export class FlagService {
   }
 
   deleteFlag(id: number){
+    console.log("delete: ", id);
     return this.http.delete(this.rootURL+"/Flag/"+id);
+  }
+
+  getFlagByUserName(userName: string): Observable<Flag[]>{
+    return this.http.get<Flag[]>(this.rootURL+"/Flag/username/"+userName);
+  }
+
+  refreshList(){
+    this.http.get(this.rootURL+"/Flag").toPromise().then(res => {
+      this.list = res as Flag[];
+    });
   }
 }

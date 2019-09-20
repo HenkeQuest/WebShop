@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 
-namespace WebApplication1_delete.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
@@ -35,6 +35,13 @@ namespace WebApplication1_delete.Controllers
         public async Task<ActionResult<IEnumerable<Clothing>>> GetClothing()
         {
             return await _context.Clothings.ToListAsync();
+        }
+
+        // GET: api/Clothing/username/username
+        [HttpGet("username/{userName}")]
+        public async Task<ActionResult<IEnumerable<Clothing>>> GetFlagsByUserName(string userName)
+        {
+            return await _context.Clothings.Where(b => b.UserName == userName).ToListAsync();
         }
 
         // GET: api/Clothing/5
@@ -66,6 +73,7 @@ namespace WebApplication1_delete.Controllers
             clothing.Category = Request.Form["Category"];
             clothing.Title = Request.Form["Title"];
             clothing.Price = Request.Form["Price"];
+            clothing.UserName = Request.Form["UserName"];
             clothing.ID = id;
 
             Debug.WriteLine("Pass file request");
@@ -147,7 +155,8 @@ namespace WebApplication1_delete.Controllers
             clothing.Price = Request.Form["Price"];
             clothing.Description = Request.Form["Description"];
             clothing.ImagePath = Request.Form["ImagePath"];
-            clothing.Category = Request.Form["Category"]; ;
+            clothing.Category = Request.Form["Category"];
+            clothing.UserName = Request.Form["UserName"];
 
             //Create custom filename
             IFormFile file = Request.Form.Files[0];

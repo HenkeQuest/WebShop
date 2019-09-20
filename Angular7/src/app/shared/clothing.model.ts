@@ -7,4 +7,5 @@ export class Clothing {
     Image: File;
     ImagePath: string;
     Category: string;
+    UserName: string;
 }

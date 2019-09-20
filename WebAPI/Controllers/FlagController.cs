@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 
-namespace WebApplication1_delete.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -34,6 +34,14 @@ namespace WebApplication1_delete.Controllers
         public async Task<ActionResult<IEnumerable<Flag>>> GetFlag()
         {
             return await _context.Flags.ToListAsync();
+        }
+
+        // GET: api/Flag/username/username
+        [HttpGet("username/{userName}")]
+        public async Task<ActionResult<IEnumerable<Flag>>> GetFlagsByUserName(string userName)
+        {
+
+            return await _context.Flags.Where(b => b.UserName == userName).ToListAsync();
         }
 
         // GET: api/Flag/5
@@ -64,6 +72,7 @@ namespace WebApplication1_delete.Controllers
             flag.Category = Request.Form["Category"];
             flag.Title = Request.Form["Title"];
             flag.Price = Request.Form["Price"];
+            flag.UserName = Request.Form["UserName"];
             flag.ID = id;
 
             Debug.WriteLine("Pass file request");
@@ -143,7 +152,8 @@ namespace WebApplication1_delete.Controllers
             flag.Price = Request.Form["Price"];
             flag.Description = Request.Form["Description"];
             flag.ImagePath = Request.Form["ImagePath"];
-            flag.Category = Request.Form["Category"]; ;
+            flag.Category = Request.Form["Category"];
+            flag.UserName = Request.Form["UserName"];
 
             //Create custom filename
             IFormFile file = Request.Form.Files[0];
@@ -190,6 +200,7 @@ namespace WebApplication1_delete.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Flag>> DeleteFlag(int id)
         {
+            Debug.WriteLine("Delete");
             var flag = await _context.Flags.FindAsync(id);
             if (flag == null)
             {

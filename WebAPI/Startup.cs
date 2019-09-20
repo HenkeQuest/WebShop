@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,7 +18,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 
-namespace WebApplication1_delete
+namespace WebAPI
 {
     public class Startup
     {

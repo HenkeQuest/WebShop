@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Clothing } from './clothing.model';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -25,8 +26,9 @@ export class ClothingService {
     this.formData.ImagePath = "";
     this.formData.Description = "";
     this.formData.Category = "Clothing";
+    this.formData.UserName = "Default";
 
-    this.getClothing().then(res =>{
+    this.getClothings().then(res =>{
       this.list = res as Clothing[];
     })
     
@@ -40,7 +42,8 @@ export class ClothingService {
     Image: new FormControl(null),
     ImagePath: new FormControl("default-image.png"),
     Description: new FormControl(""),
-    Category: new FormControl("Clothing")
+    Category: new FormControl("Clothing"),
+    UserName: new FormControl("")
   })
 
   initializeFormGroup() {
@@ -52,13 +55,18 @@ export class ClothingService {
       Image: null,
       ImagePath: '',
       Description: '',
-      Category: 'Clothing'
+      Category: 'Clothing',
+      UserName: ''
     });
   }
 
 
-  getClothing(){
+  getClothings(){
     return this.http.get<Clothing[]>(this.rootURL + "/Clothing").toPromise();
+  }
+
+  getClothing(id:number): Observable<Clothing>{
+    return this.http.get<Clothing>(this.rootURL+"/Clothing/"+id);
   }
 
   postClothing(modelFormData : Clothing, fileToUpload: File ){
@@ -71,8 +79,7 @@ export class ClothingService {
     formData.append("Image", fileToUpload, fileToUpload.name);
     formData.append("ImagePath", modelFormData.ImagePath);
     formData.append("Category", modelFormData.Category);
-
-    console.log("modelFormData: ", modelFormData);
+    formData.append("UserName", modelFormData.UserName);
 
     return this.http.post(this.rootURL+"/Clothing", formData)
   }
@@ -90,6 +97,7 @@ export class ClothingService {
     }
     formData.append("ImagePath", modelFormData.ImagePath);
     formData.append("Category", modelFormData.Category);
+    formData.append("UserName", modelFormData.UserName);
 
     console.log("modelFormData: ", modelFormData);
 
@@ -102,6 +110,16 @@ export class ClothingService {
 
   deleteClothing(id: number){
     return this.http.delete(this.rootURL+"/Clothing/"+id);
+  }
+
+  getClothingByUserName(userName: string): Observable<Clothing[]>{
+    return this.http.get<Clothing[]>(this.rootURL+"/Clothing/username/"+userName);
+  }
+
+  refreshList(){
+    this.http.get(this.rootURL+"/Clothing").toPromise().then(res => {
+      this.list = res as Clothing[];
+    });
   }
 
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1_delete.Models
+namespace WebAPI.Models
 {
     public class Record
     {
@@ -32,6 +32,8 @@ namespace WebApplication1_delete.Models
         public string Price { get; set; }
         [Column(TypeName = "nvarchar(50)")]
         public string Category { get; set; }
+
+        public string UserName { get; set; }
 
 
     }

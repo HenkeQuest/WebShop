@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1_delete.Models
+namespace WebAPI.Models
 {
     public class Flag
     {
@@ -23,5 +23,7 @@ namespace WebApplication1_delete.Models
         public string ImagePath { get; set; }
         [Column(TypeName = "nvarchar(250)")]
         public string Category { get; set; }
+
+        public string UserName { get; set; }
     }
 }

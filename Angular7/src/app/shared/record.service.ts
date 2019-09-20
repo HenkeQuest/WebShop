@@ -92,6 +92,7 @@ export class RecordService {
     formData.append("Title", modelFormData.Title);
     formData.append("Price", modelFormData.Price);
     formData.append("Category", modelFormData.Category);
+    formData.append("UserName", modelFormData.UserName);
 
     return this.http.post(this.rootURL+"/Record", formData)
   }
@@ -111,17 +112,27 @@ export class RecordService {
     formData.append("Title", modelFormData.Title);
     formData.append("Price", modelFormData.Price);
     formData.append("Category", modelFormData.Category);
+    formData.append("UserName", modelFormData.UserName);
 
     this.getRecords();
     return this.http.put(this.rootURL+"/Record/"+modelFormData.ID,formData);
   }
 
   deleteRecord(id: number){
+    console.log("delete");
     return this.http.delete(this.rootURL+"/Record/"+id);
   }
 
   getRecords(): Observable<Record[]>{
     return this.http.get<Record[]>(this.rootURL+"/Record");
+  }
+
+  getRecord(id:number): Observable<Record>{
+    return this.http.get<Record>(this.rootURL+"/Record/"+id);
+  }
+
+  getRecordByUserName(userName: string): Observable<Record[]>{
+    return this.http.get<Record[]>(this.rootURL+"/Record/username/"+userName);
   }
 
   refreshList(){

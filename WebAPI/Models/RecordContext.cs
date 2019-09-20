@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Design;
-using WebApplication1_delete.Models;
+using WebAPI.Models;
 
-namespace WebApplication1_delete.Models
+namespace WebAPI.Models
 {
     public class RecordContext:DbContext
     {
@@ -17,7 +17,10 @@ namespace WebApplication1_delete.Models
 
         public DbSet<Record> Records { get; set; }
 
-        public DbSet<WebApplication1_delete.Models.Flag> Flag { get; set; }
+        public DbSet<Flag> Flags { get; set; }
+
+        public DbSet<Clothing> Clothings { get; set; }
+
 
         //public DbSet<Category> Categories { get; set; }
 
